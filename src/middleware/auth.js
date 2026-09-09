@@ -14,7 +14,7 @@ const requireAuth = async (req, res, next) => {
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     const result = await query(
-      `SELECT u.id, u.email, u.full_name, u.role
+      `SELECT u.id, u.first_name, u.last_name, u.username, u.role
        FROM sessions s
        JOIN users u ON u.id = s.user_id
        WHERE s.token_id = $1 AND s.expires_at > NOW() AND u.is_active = TRUE`,
@@ -32,11 +32,4 @@ const requireAuth = async (req, res, next) => {
   }
 };
 
-const requireAdmin = (req, res, next) => {
-  if (req.user?.role !== 'admin') {
-    return res.status(403).json({ error: 'Administrator access required' });
-  }
-  return next();
-};
-
-module.exports = { requireAuth, requireAdmin };
+module.exports = { requireAuth };

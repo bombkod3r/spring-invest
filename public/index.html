@@ -1,0 +1,2335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Springs Invests</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+  --bg:#0a0b10;
+  --surface:#13151d;
+  --surface-2:#1b1e29;
+  --surface-3:#242836;
+  --border:rgba(255,255,255,.08);
+  --border-strong:rgba(255,255,255,.15);
+  --text:#eef0f4;
+  --text-dim:#9aa1b3;
+  --text-faint:#666d80;
+  --accent:#caa057;
+  --accent-hover:#dbb46c;
+  --accent-ink:#1c1305;
+  --accent-wash:rgba(202,160,87,.12);
+  --success:#3fae82;
+  --success-bg:rgba(63,174,130,.12);
+  --success-border:rgba(63,174,130,.32);
+  --danger:#e0685a;
+  --danger-bg:rgba(224,104,90,.12);
+  --danger-border:rgba(224,104,90,.32);
+  --warn:#d9a441;
+  --warn-bg:rgba(217,164,65,.12);
+  --radius-sm:8px;
+  --radius-md:14px;
+  --radius-lg:18px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.18);
+  --font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  margin:0;
+  padding:24px 16px 64px;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+h2,h3{margin:0 0 4px;font-weight:600;letter-spacing:-.01em;color:var(--text);}
+p{margin:0 0 8px;}
+b{font-weight:600;}
+
+/* ---------- header ---------- */
+
+.app-header{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-bottom:30px;
+}
+.brand-mark{
+  width:32px;height:32px;border-radius:9px;flex-shrink:0;
+  background:var(--accent);color:var(--accent-ink);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:15px;letter-spacing:0;
+}
+.brand-name{font-size:16px;font-weight:600;letter-spacing:-.01em;color:var(--text);}
+
+/* ---------- layout primitives ---------- */
+
+.container{
+  max-width:440px;
+  margin:0 auto 18px;
+  background:var(--surface);
+  padding:24px;
+  border-radius:var(--radius-lg);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+}
+
+.section{max-width:960px;margin:0 auto 22px;}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;gap:10px;}
+
+.eyebrow{
+  font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;
+  color:var(--text-dim);margin:0;
+}
+
+h2{font-size:19px;}
+
+/* ---------- forms ---------- */
+
+.field{margin:14px 0;}
+.field label{
+  display:block;font-size:12px;color:var(--text-dim);
+  margin-bottom:6px;font-weight:500;
+}
+
+input,select{
+  width:100%;
+  padding:12px 14px;
+  margin:0;
+  border-radius:var(--radius-sm);
+  border:1px solid var(--border-strong);
+  background:var(--surface-2);
+  color:var(--text);
+  outline:none;
+  font-size:14px;
+  font-family:inherit;
+  transition:border-color .15s ease,box-shadow .15s ease;
+}
+input::placeholder{color:var(--text-faint);}
+input:focus,select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-wash);
+}
+select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239aa1b3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:36px;}
+
+.checkbox{display:flex;align-items:flex-start;gap:10px;margin:16px 0 4px;font-size:13px;color:var(--text-dim);line-height:1.5;}
+.checkbox input{width:auto;margin-top:3px;}
+
+/* ---------- buttons ---------- */
+
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--accent);
+  color:var(--accent-ink);
+  border:none;
+  padding:13px 16px;
+  border-radius:var(--radius-sm);
+  font-weight:600;
+  font-size:14px;
+  font-family:inherit;
+  width:100%;
+  cursor:pointer;
+  margin-top:12px;
+  transition:background .15s ease,transform .08s ease;
+}
+.btn:hover{background:var(--accent-hover);}
+.btn:active{transform:translateY(1px);}
+
+.btn-secondary{background:var(--surface-3);color:var(--text);border:1px solid var(--border-strong);}
+.btn-secondary:hover{background:var(--surface-2);}
+
+.btn-green{background:var(--success);color:#07130e;}
+.btn-green:hover{filter:brightness(1.1);}
+
+.btn-red{background:transparent;color:var(--danger);border:1px solid var(--danger-border);}
+.btn-red:hover{background:var(--danger-bg);}
+
+.link{color:var(--accent);cursor:pointer;font-weight:500;}
+.link:hover{color:var(--accent-hover);}
+
+.hidden{display:none!important;}
+
+/* ---------- alerts ---------- */
+
+.result,.success,.error{
+  padding:14px 16px;
+  border-radius:var(--radius-sm);
+  margin-top:12px;
+  font-size:13.5px;
+  line-height:1.65;
+  border:1px solid transparent;
+}
+.success,.result{background:var(--success-bg);border-color:var(--success-border);color:#c7f3e1;}
+.error{background:var(--danger-bg);border-color:var(--danger-border);color:#ffdcd5;}
+
+/* ---------- icons ---------- */
+
+.icon{display:inline-flex;align-items:center;justify-content:center;line-height:0;flex-shrink:0;}
+.icon svg{width:18px;height:18px;display:block;}
+
+/* ---------- top bar ---------- */
+
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  max-width:440px;margin:0 auto 18px;
+}
+.topbar.wide{max-width:720px;}
+.topbar .greeting{font-size:15px;color:var(--text-dim);font-weight:500;}
+.topbar .greeting b{color:var(--text);font-weight:600;}
+.logout-btn{width:auto;margin:0;padding:9px 14px;font-size:12.5px;}
+
+/* ---------- balance card ---------- */
+
+.balance-card{
+  max-width:440px;margin:0 auto 16px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:24px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:var(--shadow-sm);
+}
+.balance-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--accent),transparent 75%);
+}
+.balance-label{color:var(--text-dim);font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;}
+.balance{
+  font-size:33px;font-weight:700;margin:8px 0 18px;
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+}
+.balance .ksh{font-size:15px;color:var(--text-dim);font-weight:600;margin-right:2px;}
+
+.deposit-big{
+  background:var(--accent);color:var(--accent-ink);
+  font-size:14.5px;font-weight:700;letter-spacing:.01em;
+  padding:15px;border-radius:var(--radius-sm);border:none;width:100%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:background .15s ease;
+}
+.deposit-big:hover{background:var(--accent-hover);}
+
+/* ---------- wallet actions ---------- */
+
+.wallet-actions{
+  max-width:440px;margin:0 auto 16px;
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+}
+.wallet-action{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 10px;border-radius:var(--radius-md);
+  border:1px solid var(--border);
+  background:var(--surface);color:var(--text);
+  cursor:pointer;font-weight:600;font-size:13.5px;font-family:inherit;
+  transition:border-color .15s ease,background .15s ease;
+}
+.wallet-action:hover{border-color:var(--accent);background:var(--surface-2);}
+.wallet-action .icon{color:var(--accent);}
+
+.wallet-header{display:flex;align-items:center;gap:12px;max-width:440px;margin:0 auto 20px;}
+.back-btn{width:38px;height:38px;padding:0;margin:0;border-radius:10px;flex-shrink:0;}
+
+/* ---------- deposit method cards ---------- */
+
+.method-card{
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  padding:13px 14px;margin:10px 0;cursor:pointer;
+  transition:border-color .15s ease,background .15s ease;
+}
+.method-card:hover{border-color:var(--accent);background:var(--surface-3);}
+.method-icon{
+  width:38px;height:38px;border-radius:10px;flex-shrink:0;
+  background:var(--surface-3);color:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+}
+.method-title{font-size:14.5px;font-weight:600;}
+.method-description{font-size:12.5px;color:var(--text-dim);margin-top:2px;}
+
+/* ---------- till box ---------- */
+
+.till-box{
+  background:var(--success-bg);border:1px solid var(--success-border);
+  border-radius:var(--radius-md);padding:20px;margin:14px 0;text-align:center;
+}
+.till-number{
+  font-size:29px;font-weight:700;letter-spacing:3px;margin:8px 0 14px;
+  font-variant-numeric:tabular-nums;color:var(--text);
+}
+.copy-till{
+  background:var(--accent);color:var(--accent-ink);border:none;
+  padding:13px;border-radius:var(--radius-sm);width:100%;font-weight:600;cursor:pointer;font-family:inherit;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.confirm-box{
+  background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:14px;margin-top:12px;
+}
+.confirm-box ol{padding-left:18px;margin:8px 0 0;}
+.confirm-box li{margin-bottom:5px;}
+
+/* ---------- admin link ---------- */
+
+.admin-link{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-top:18px;color:var(--text-faint);font-size:12px;cursor:pointer;
+}
+.admin-link:hover{color:var(--text-dim);}
+
+/* ---------- product tiers ---------- */
+
+.products{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;
+}
+.tier-card{
+  position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:20px;display:flex;flex-direction:column;gap:10px;
+  transition:border-color .15s ease,transform .15s ease;
+}
+.tier-card:hover{border-color:var(--border-strong);transform:translateY(-2px);}
+.tier-card.popular{border-color:var(--accent);}
+.tier-badge{
+  position:absolute;top:-10px;right:16px;background:var(--accent);color:var(--accent-ink);
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  padding:3px 10px;border-radius:999px;
+}
+.tier-name{font-size:13px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;}
+.tier-rate{font-size:27px;font-weight:700;letter-spacing:-.02em;color:var(--text);}
+.tier-rate span{font-size:12.5px;font-weight:500;color:var(--text-dim);}
+.tier-range{font-size:12.5px;color:var(--text-dim);}
+.tier-example{font-size:11.5px;color:var(--text-faint);padding-top:8px;border-top:1px solid var(--border);}
+
+/* ---------- rows: transactions / investments / admin ---------- */
+
+.row{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-md);
+  padding:13px 14px;margin:9px 0;
+}
+.row-icon{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;background:var(--surface-3);
+}
+.row-icon.credit{color:var(--success);}
+.row-icon.debit{color:var(--danger);}
+.row-icon.neutral{color:var(--accent);}
+.row-body{flex:1;min-width:0;}
+.row-title{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.row-method{font-weight:500;color:var(--text-faint);font-size:11px;text-transform:uppercase;letter-spacing:.03em;}
+.row-meta{font-size:12px;color:var(--text-faint);margin-top:4px;}
+.row-amount{font-weight:700;font-size:14px;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;flex-shrink:0;}
+.row-amount.credit{color:var(--success);}
+.row-amount.debit{color:var(--danger);}
+.row-sub{font-size:10.5px;color:var(--text-faint);font-weight:400;margin-top:3px;}
+.row-actions{display:flex;gap:8px;margin-top:10px;}
+.row-actions .btn{margin:0;padding:8px 12px;font-size:12.5px;width:auto;flex:1;}
+
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.6;}
+.pill-pending{background:var(--warn-bg);color:var(--warn);}
+.pill-completed,.pill-approved,.pill-active{background:var(--success-bg);color:var(--success);}
+.pill-rejected,.pill-cancelled{background:var(--danger-bg);color:var(--danger);}
+.pill-matured{background:rgba(255,255,255,.08);color:var(--text-dim);}
+
+.empty-note{font-size:13px;color:var(--text-faint);padding:6px 2px;}
+
+/* ---------- admin stats grid ---------- */
+
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.stat-card{
+  background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-md);
+  padding:14px;
+}
+.stat-card .stat-label{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;font-weight:600;}
+.stat-card .stat-value{font-size:22px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums;}
+
+/* ---------- chat / advisor ---------- */
+
+.chat{
+  max-width:440px;margin:20px auto 0;
+  background:var(--surface);padding:22px;border-radius:var(--radius-lg);border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+}
+
+/* ---------- modal ---------- */
+
+.modal{
+  position:fixed;inset:0;
+  background:rgba(4,5,8,.72);
+  backdrop-filter:blur(2px);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;padding:20px;
+}
+.modal-content{
+  background:var(--surface);
+  padding:24px;
+  border-radius:var(--radius-lg);
+  width:100%;max-width:440px;max-height:85vh;overflow-y:auto;
+  border:1px solid var(--border-strong);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  position:relative;
+}
+.modal-close{
+  position:absolute;top:14px;right:14px;
+  width:28px;height:28px;border-radius:8px;border:none;
+  background:var(--surface-3);color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal-close:hover{color:var(--text);}
+.modal-content h2{padding-right:24px;margin-bottom:14px;}
+.modal-content p{font-size:13.5px;color:var(--text-dim);line-height:1.6;}
+
+.small{font-size:12.5px;color:var(--text-dim);}
+
+@media(max-width:520px){
+  body{padding:18px 12px 60px;}
+  .balance{font-size:28px;}
+  .container{padding:20px;}
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="app-header">
+<span class="brand-mark">S</span>
+<span class="brand-name">Springs Invests</span>
+</header>
+
+
+<!-- ==================================================
+     LOGIN
+================================================== -->
+
+<div id="loginPage" class="container">
+
+<h2>Welcome back</h2>
+<p class="small" style="margin-bottom:18px;">Log in to manage your wallet and investments.</p>
+
+<div class="field">
+<label for="loginUsername">Username</label>
+<input type="text" id="loginUsername" placeholder="e.g. janedoe" autocomplete="username">
+</div>
+
+<div class="field">
+<label for="loginPassword">Password</label>
+<input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+</div>
+
+<button class="btn" onclick="login()">
+Log in
+</button>
+
+<div id="loginMessage"></div>
+
+<p style="text-align:center;margin-top:16px;">
+<span class="link" onclick="forgotPassword()">Forgot password?</span>
+</p>
+
+<p style="text-align:center;" class="small">
+Don't have an account?
+<span class="link" onclick="showSignup()">Sign up</span>
+</p>
+
+<span class="admin-link" onclick="showAdminLogin()">
+<span class="icon" id="adminLinkIcon"></span>
+Administrator login
+</span>
+
+</div>
+
+
+<!-- ==================================================
+     SIGN UP
+================================================== -->
+
+<div id="signupPage" class="container hidden">
+
+<h2>Create your account</h2>
+<p class="small" style="margin-bottom:18px;">It only takes a minute to get started.</p>
+
+<div class="field">
+<label for="signupFirst">First name</label>
+<input type="text" id="signupFirst" placeholder="Jane">
+</div>
+
+<div class="field">
+<label for="signupLast">Last name</label>
+<input type="text" id="signupLast" placeholder="Doe">
+</div>
+
+<div class="field">
+<label for="signupUsername">Username</label>
+<input type="text" id="signupUsername" placeholder="janedoe">
+</div>
+
+<div class="field">
+<label for="signupPassword">Password</label>
+<input type="password" id="signupPassword" placeholder="At least 6 characters">
+</div>
+
+<div class="field">
+<label for="signupConfirm">Confirm password</label>
+<input type="password" id="signupConfirm" placeholder="Re-enter your password">
+</div>
+
+<div class="checkbox">
+<input type="checkbox" id="agreeTerms">
+<label>
+I agree to the
+<span class="link" onclick="showTerms()">Terms and Conditions</span>
+</label>
+</div>
+
+<button class="btn" onclick="signup()">
+Create account
+</button>
+
+<div id="signupMessage"></div>
+
+<p style="text-align:center;margin-top:16px;" class="small">
+Already have an account?
+<span class="link" onclick="showLogin()">Log in</span>
+</p>
+
+</div>
+
+
+<!-- ==================================================
+     DASHBOARD
+================================================== -->
+
+<div id="dashboardPage" class="hidden">
+
+<div class="topbar">
+<div class="greeting">Hello, <b id="userName"></b></div>
+<button class="btn btn-secondary logout-btn" onclick="logout()">Logout</button>
+</div>
+
+
+<!-- BALANCE -->
+
+<div class="balance-card">
+<div class="balance-label">Available wallet balance</div>
+<div class="balance"><span class="ksh">Ksh</span><span id="dashboardBalance">0.00</span></div>
+<button class="deposit-big" onclick="openWallet('deposit')">
+<span class="icon" id="depositBigIcon"></span>
+Deposit funds
+</button>
+</div>
+
+
+<!-- WALLET BUTTONS -->
+
+<div class="wallet-actions">
+<button class="wallet-action" onclick="openWallet('deposit')">
+<span class="icon" id="walletDepositIcon"></span> Deposit
+</button>
+<button class="wallet-action" onclick="openWallet('withdraw')">
+<span class="icon" id="walletWithdrawIcon"></span> Withdraw
+</button>
+</div>
+
+
+<div class="section">
+<div class="section-head"><p class="eyebrow">Investment products</p></div>
+<div class="products" id="products"></div>
+</div>
+
+
+<!-- CALCULATOR -->
+
+<div class="section" style="max-width:440px;">
+<p class="eyebrow">Investment calculator</p>
+<div class="container" style="margin-top:12px;">
+
+<div class="field">
+<label for="productSelect">Product</label>
+<select id="productSelect"></select>
+</div>
+
+<div class="field">
+<label for="amountInput">Amount (Ksh)</label>
+<input type="number" id="amountInput" placeholder="Enter amount">
+</div>
+
+<button class="btn" onclick="calculate()">Calculate payout</button>
+
+<div id="calcResult"></div>
+
+</div>
+</div>
+
+
+<!-- AI -->
+
+<div class="chat">
+
+<p class="eyebrow" style="margin-bottom:14px;">Gem investment advisor</p>
+
+<div class="field" style="margin-top:0;">
+<input type="text" id="chatInput" placeholder="Ask about the Gem package…">
+</div>
+
+<button class="btn" onclick="askAI()">Ask</button>
+
+<div id="chatReply" style="margin-top:4px;"></div>
+
+</div>
+
+</div>
+
+
+<!-- ==================================================
+     WALLET PAGE
+================================================== -->
+
+<div id="walletPage" class="hidden">
+
+<div class="wallet-header">
+<button class="btn btn-secondary back-btn" onclick="backToDashboard()" aria-label="Back">
+<span class="icon" id="backIcon"></span>
+</button>
+<h2>My wallet</h2>
+</div>
+
+
+<!-- WALLET BALANCE -->
+
+<div class="balance-card">
+<div class="balance-label">Available balance</div>
+<div class="balance"><span class="ksh">Ksh</span><span id="walletBalance">0.00</span></div>
+</div>
+
+
+<!-- WALLET TABS -->
+
+<div class="wallet-actions">
+<button class="wallet-action" onclick="showWalletSection('deposit')">
+<span class="icon" id="tabDepositIcon"></span> Deposit
+</button>
+<button class="wallet-action" onclick="showWalletSection('withdraw')">
+<span class="icon" id="tabWithdrawIcon"></span> Withdraw
+</button>
+</div>
+
+
+<!-- DEPOSIT -->
+
+<div id="depositSection" class="container">
+
+<p class="eyebrow" style="margin-bottom:14px;">Deposit funds</p>
+<p class="small" style="margin-bottom:14px;">Choose your preferred payment method.</p>
+
+<div class="method-card" onclick="selectDepositMethod('mpesa')">
+<div class="method-icon" id="methodMpesaIcon"></div>
+<div>
+<div class="method-title">M-Pesa</div>
+<div class="method-description">Deposit using M-Pesa mobile money.</div>
+</div>
+</div>
+
+<div class="method-card" onclick="selectDepositMethod('airtel')">
+<div class="method-icon" id="methodAirtelIcon"></div>
+<div>
+<div class="method-title">Airtel Money</div>
+<div class="method-description">Deposit using Airtel Money.</div>
+</div>
+</div>
+
+<div class="method-card" onclick="selectDepositMethod('crypto')">
+<div class="method-icon" id="methodCryptoIcon"></div>
+<div>
+<div class="method-title">USD / Crypto</div>
+<div class="method-description">Deposit using supported USD or cryptocurrency.</div>
+</div>
+</div>
+
+<div id="depositForm"></div>
+
+</div>
+
+
+<!-- WITHDRAW -->
+
+<div id="withdrawSection" class="container hidden">
+
+<p class="eyebrow" style="margin-bottom:14px;">Withdraw funds</p>
+<p class="small" style="margin-bottom:14px;">Choose where you would like your funds sent.</p>
+
+<div class="row" style="background:var(--surface-2);">
+<div class="row-body">
+<b class="small" style="color:var(--text);">Minimum withdrawal: Ksh 500</b>
+<div class="row-meta">USD equivalent: $3.88 (1 USD = Ksh 129) · Processing fee: Ksh 10</div>
+</div>
+</div>
+
+<div class="field">
+<label for="withdrawMethod">Method</label>
+<select id="withdrawMethod">
+<option value="mpesa">M-Pesa</option>
+<option value="airtel">Airtel Money</option>
+<option value="crypto">USD / Crypto</option>
+</select>
+</div>
+
+<div class="field">
+<label for="withdrawAmount">Amount (Ksh, minimum 500)</label>
+<input type="number" id="withdrawAmount" placeholder="Enter amount" min="500" oninput="updateWithdrawUSD()">
+</div>
+
+<div id="withdrawUSDPreview" class="small">USD equivalent: $0.00 (1 USD = Ksh 129)</div>
+
+<div class="field">
+<label for="withdrawAccount">Phone number / wallet address</label>
+<input type="text" id="withdrawAccount" placeholder="Where should we send it?">
+</div>
+
+<button class="btn btn-red" onclick="requestWithdraw()">Request withdrawal</button>
+
+<div id="withdrawMessage"></div>
+
+</div>
+
+
+<!-- TRANSACTIONS -->
+
+<div class="container">
+<p class="eyebrow" style="margin-bottom:4px;">Transaction history</p>
+<div id="transactions"></div>
+</div>
+
+
+<!-- INVESTMENTS -->
+
+<div class="container">
+<p class="eyebrow" style="margin-bottom:4px;">Active investments</p>
+<div id="activeInvestments">
+<p class="empty-note">No active investments yet.</p>
+</div>
+</div>
+
+</div>
+
+
+<!-- ==================================================
+     ADMIN LOGIN
+================================================== -->
+
+<div id="adminLoginPage" class="container hidden">
+
+<h2>Administrator login</h2>
+<p class="small" style="margin-bottom:18px;">Restricted access for Springs Invests staff.</p>
+
+<div class="field">
+<label for="adminUsername">Admin username</label>
+<input type="text" id="adminUsername" placeholder="admin">
+</div>
+
+<div class="field">
+<label for="adminPassword">Admin password</label>
+<input type="password" id="adminPassword" placeholder="••••••••">
+</div>
+
+<button class="btn" onclick="adminLogin()">Log in</button>
+
+<div id="adminLoginMessage"></div>
+
+<p style="text-align:center;margin-top:16px;" class="small">
+<span class="link" onclick="showLogin()">Back to user login</span>
+</p>
+
+</div>
+
+
+<!-- ==================================================
+     ADMIN DASHBOARD
+================================================== -->
+
+<div id="adminPage" class="hidden">
+
+<div class="topbar wide">
+<div class="greeting"><b>Admin dashboard</b></div>
+<button class="btn btn-secondary logout-btn" onclick="adminLogout()">Logout</button>
+</div>
+
+<div class="container wide" style="max-width:720px;">
+<div class="section-head">
+<p class="eyebrow" style="margin:0;">Overview</p>
+<button class="btn btn-secondary" style="width:auto;margin:0;padding:8px 14px;font-size:12.5px;" onclick="refreshAdmin()">Refresh</button>
+</div>
+<div class="stats-grid" id="adminStats"></div>
+</div>
+
+<div class="container wide" style="max-width:720px;">
+<p class="eyebrow" style="margin-bottom:4px;">Deposits</p>
+<div id="adminDeposits"></div>
+</div>
+
+<div class="container wide" style="max-width:720px;">
+<p class="eyebrow" style="margin-bottom:4px;">Withdrawals</p>
+<div id="adminWithdrawals"></div>
+</div>
+
+<div class="container wide" style="max-width:720px;">
+<p class="eyebrow" style="margin-bottom:4px;">Users</p>
+<div id="adminUsers"></div>
+</div>
+
+<div class="container wide" style="max-width:720px;">
+<p class="eyebrow" style="margin-bottom:4px;">Activity log</p>
+<div id="adminActivity"></div>
+</div>
+
+</div>
+
+
+<!-- ==================================================
+     TERMS MODAL
+================================================== -->
+
+<div id="termsModal" class="modal hidden">
+<div class="modal-content">
+
+<button class="modal-close" onclick="closeTerms()" aria-label="Close">✕</button>
+
+<h2>Terms and Conditions</h2>
+
+<p><b>1. Age requirement</b><br>Users must be 18 years or older.</p>
+<p><b>2. Risk warning</b><br>Investment involves risk. Never invest money you cannot afford to lose.</p>
+<p><b>3. Investment duration</b><br>Investments are subject to the stated duration and conditions.</p>
+<p><b>4. Returns</b><br>Returns displayed in this demonstration are examples and are not guarantees.</p>
+
+<button class="btn" onclick="closeTerms()">I understand</button>
+
+</div>
+</div>
+
+
+<!-- ==================================================
+     FORGOT PASSWORD
+================================================== -->
+
+<div id="forgotModal" class="modal hidden">
+<div class="modal-content">
+
+<button class="modal-close" onclick="closeForgot()" aria-label="Close">✕</button>
+
+<h2>Reset password</h2>
+
+<div class="field">
+<label for="resetUsername">Username</label>
+<input type="text" id="resetUsername" placeholder="Your username">
+</div>
+
+<div class="field">
+<label for="resetPassword">New password</label>
+<input type="password" id="resetPassword" placeholder="At least 6 characters">
+</div>
+
+<div class="field">
+<label for="resetConfirm">Confirm new password</label>
+<input type="password" id="resetConfirm" placeholder="Re-enter your new password">
+</div>
+
+<button class="btn" onclick="resetPassword()">Reset password</button>
+
+<div id="resetMessage"></div>
+
+<button class="btn btn-secondary" onclick="closeForgot()">Cancel</button>
+
+</div>
+</div>
+
+
+<script>
+
+
+/* ==================================================
+   ICONS
+================================================== */
+
+const ICONS = {
+  deposit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="15"/><polyline points="7 10 12 15 17 10"/><line x1="4" y1="20" x2="20" y2="20"/></svg>',
+  withdraw: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="21" x2="12" y2="9"/><polyline points="7 14 12 9 17 14"/><line x1="4" y1="4" x2="20" y2="4"/></svg>',
+  back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>',
+  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
+  bank: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="21" x2="21" y2="21"/><line x1="5" y1="21" x2="5" y2="10"/><line x1="19" y1="21" x2="19" y2="10"/><polygon points="12 3 21 8 3 8"/></svg>',
+  phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>',
+  coin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5c0-1.1 1.1-2 2.5-2s2.5.9 2.5 2-1.1 1.6-2.5 2-2.5.9-2.5 2 1.1 2 2.5 2 2.5-.9 2.5-2"/></svg>',
+  shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+  chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="20" y2="20"/><rect x="6" y="12" width="3" height="6"/><rect x="11" y="8" width="3" height="10"/><rect x="16" y="4" width="3" height="14"/></svg>',
+};
+
+function paintIcon(id, name){
+  const el = document.getElementById(id);
+  if(el) el.innerHTML = ICONS[name] || "";
+}
+
+[
+  ["adminLinkIcon","shield"],
+  ["depositBigIcon","deposit"],
+  ["walletDepositIcon","deposit"],
+  ["walletWithdrawIcon","withdraw"],
+  ["backIcon","back"],
+  ["tabDepositIcon","deposit"],
+  ["tabWithdrawIcon","withdraw"],
+  ["methodMpesaIcon","phone"],
+  ["methodAirtelIcon","phone"],
+  ["methodCryptoIcon","coin"],
+].forEach(([id, name]) => paintIcon(id, name));
+
+
+/* ==================================================
+   API
+================================================== */
+
+// Same-origin by default since this page is served by the Express app.
+// Set window.API_URL to the backend's origin before this script runs if the
+// frontend is ever hosted separately from the backend.
+const API_URL = (typeof window.API_URL !== "undefined" ? window.API_URL : "").replace(/\/$/, "");
+
+let authToken = localStorage.getItem("springsToken") || null;
+let adminToken = localStorage.getItem("springsAdminToken") || null;
+
+async function apiFetch(path, options = {}, token = authToken){
+  const headers = Object.assign({ "Content-Type": "application/json" }, options.headers || {});
+  if(token) headers["Authorization"] = `Bearer ${token}`;
+
+  const res = await fetch(API_URL + path, { ...options, headers });
+  let data = {};
+  try{ data = await res.json(); }catch(e){ /* empty body, e.g. 204 */ }
+
+  if(!res.ok){
+    throw new Error(data.error || `Request failed (${res.status})`);
+  }
+  return data;
+}
+
+function formatKsh(value){
+  return Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function pillClass(status){
+  return `pill pill-${status}`;
+}
+
+
+/* ==================================================
+   IN-MEMORY STATE (sourced from the backend, not localStorage)
+================================================== */
+
+let products = {};
+let currentBalance = 0;
+let currentTransactions = [];
+let currentInvestments = [];
+let lastCalculation = null;
+
+
+/* ==================================================
+   WALLET / TRANSACTIONS / INVESTMENTS RENDERING
+================================================== */
+
+function updateBalanceDisplays(){
+
+  const text = formatKsh(currentBalance);
+
+  document.getElementById("dashboardBalance").textContent = text;
+  document.getElementById("walletBalance").textContent = text;
+
+}
+
+
+function renderTransactions(){
+
+  const box = document.getElementById("transactions");
+
+  if(currentTransactions.length === 0){
+    box.innerHTML = `<p class="empty-note">No transactions yet.</p>`;
+    return;
+  }
+
+  box.innerHTML = currentTransactions.map(t => {
+
+    const isWithdraw = t.type === "withdrawal";
+    const isCredit = t.type === "deposit" || t.type === "profit";
+    const iconName = isWithdraw ? "withdraw" : (t.type === "investment" ? "chart" : "deposit");
+    const iconCls = isCredit ? "credit" : (isWithdraw || t.type === "investment" ? "debit" : "neutral");
+    const sign = isCredit ? "+" : "−";
+    const typeLabel = t.type.charAt(0).toUpperCase() + t.type.slice(1);
+    const methodLabel = t.method ? t.method.replace(/_/g, " ").toUpperCase() : "";
+
+    let feeNote = "";
+    if(isWithdraw && Number(t.fee) > 0){
+      feeNote = `<div class="row-sub">Fee: Ksh ${Number(t.fee).toLocaleString()}</div>`;
+    }
+
+    return `
+      <div class="row">
+        <div class="row-icon ${iconCls}">${ICONS[iconName]}</div>
+        <div class="row-body">
+          <div class="row-title">${typeLabel} ${methodLabel ? `<span class="row-method">${methodLabel}</span>` : ""}</div>
+          <div class="row-meta"><span class="${pillClass(t.status)}">${t.status}</span> &nbsp;${new Date(t.createdAt).toLocaleString()}</div>
+        </div>
+        <div>
+          <div class="row-amount ${iconCls}">${sign} Ksh ${Number(t.amount).toLocaleString()}</div>
+          ${feeNote}
+        </div>
+      </div>
+    `;
+
+  }).join("");
+
+}
+
+
+function renderInvestments(){
+
+  const box = document.getElementById("activeInvestments");
+
+  if(currentInvestments.length === 0){
+    box.innerHTML = `<p class="empty-note">No active investments yet.</p>`;
+    return;
+  }
+
+  box.innerHTML = currentInvestments.map(inv => `
+    <div class="row">
+      <div class="row-icon neutral">${ICONS.chart}</div>
+      <div class="row-body">
+        <div class="row-title">${inv.productName} <span class="${pillClass(inv.status)}">${inv.status}</span></div>
+        <div class="row-meta">Invested Ksh ${Number(inv.amount).toLocaleString()} · Matures ${new Date(inv.maturityDate).toLocaleString()}</div>
+      </div>
+      <div>
+        <div class="row-amount credit">+ Ksh ${Number(inv.profit).toLocaleString()}</div>
+        <div class="row-sub">Payout Ksh ${Number(inv.expectedPayout).toLocaleString()}</div>
+      </div>
+    </div>
+  `).join("");
+
+}
+
+
+function setProductsFromApi(list){
+
+  products = {};
+
+  list.forEach(p => {
+    products[p.name] = {
+      id: p.id,
+      min: Number(p.minimumAmount),
+      max: Number(p.maximumAmount),
+      hours: p.durationHours,
+      rate: Number(p.returnRate) / 100,
+    };
+  });
+
+}
+
+
+async function loadDashboardData(){
+
+  const [productsRes, walletRes, txRes, investRes] = await Promise.all([
+    apiFetch("/api/investments/products"),
+    apiFetch("/api/wallet"),
+    apiFetch("/api/transactions"),
+    apiFetch("/api/investments"),
+  ]);
+
+  setProductsFromApi(productsRes.products);
+  currentBalance = Number(walletRes.wallet.balance);
+  currentTransactions = txRes.transactions;
+  currentInvestments = investRes.investments;
+
+  loadProducts();
+  updateBalanceDisplays();
+  renderTransactions();
+  renderInvestments();
+
+}
+
+
+function showLogin(){
+
+document.getElementById(
+"loginPage"
+).classList.remove("hidden");
+
+document.getElementById(
+"signupPage"
+).classList.add("hidden");
+
+document.getElementById(
+"dashboardPage"
+).classList.add("hidden");
+
+document.getElementById(
+"walletPage"
+).classList.add("hidden");
+
+document.getElementById(
+"adminLoginPage"
+).classList.add("hidden");
+
+document.getElementById(
+"adminPage"
+).classList.add("hidden");
+
+}
+
+
+function showSignup(){
+
+document.getElementById(
+"loginPage"
+).classList.add("hidden");
+
+document.getElementById(
+"signupPage"
+).classList.remove("hidden");
+
+}
+
+
+function showDashboard(){
+
+document.getElementById(
+"loginPage"
+).classList.add("hidden");
+
+document.getElementById(
+"signupPage"
+).classList.add("hidden");
+
+document.getElementById(
+"dashboardPage"
+).classList.remove("hidden");
+
+document.getElementById(
+"walletPage"
+).classList.add("hidden");
+
+updateBalanceDisplays();
+
+}
+
+
+function openWallet(section){
+
+document.getElementById(
+"dashboardPage"
+).classList.add("hidden");
+
+document.getElementById(
+"walletPage"
+).classList.remove("hidden");
+
+updateBalanceDisplays();
+
+showWalletSection(section);
+
+renderTransactions();
+
+}
+
+
+function backToDashboard(){
+
+document.getElementById(
+"walletPage"
+).classList.add("hidden");
+
+document.getElementById(
+"dashboardPage"
+).classList.remove("hidden");
+
+updateBalanceDisplays();
+
+}
+
+
+/* ==================================================
+   WALLET SECTIONS
+================================================== */
+
+function showWalletSection(section){
+
+const deposit=
+document.getElementById(
+"depositSection"
+);
+
+const withdraw=
+document.getElementById(
+"withdrawSection"
+);
+
+if(section==="deposit"){
+
+deposit.classList.remove("hidden");
+
+withdraw.classList.add("hidden");
+
+}else{
+
+deposit.classList.add("hidden");
+
+withdraw.classList.remove("hidden");
+
+}
+
+}
+
+
+/* ==================================================
+   SIGN UP
+================================================== */
+
+async function signup(){
+
+const first=
+document.getElementById(
+"signupFirst"
+).value.trim();
+
+const last=
+document.getElementById(
+"signupLast"
+).value.trim();
+
+const username=
+document.getElementById(
+"signupUsername"
+).value.trim().toLowerCase();
+
+const password=
+document.getElementById(
+"signupPassword"
+).value;
+
+const confirm=
+document.getElementById(
+"signupConfirm"
+).value;
+
+const terms=
+document.getElementById(
+"agreeTerms"
+).checked;
+
+const message=
+document.getElementById(
+"signupMessage"
+);
+
+if(!first||!last||!username||!password){
+
+message.innerHTML=
+`<div class="error">
+Please fill in all fields.
+</div>`;
+
+return;
+
+}
+
+if(password.length<6){
+
+message.innerHTML=
+`<div class="error">
+Password must contain at least 6 characters.
+</div>`;
+
+return;
+
+}
+
+if(password!==confirm){
+
+message.innerHTML=
+`<div class="error">
+Passwords do not match.
+</div>`;
+
+return;
+
+}
+
+if(!terms){
+
+message.innerHTML=
+`<div class="error">
+Please agree to the Terms and Conditions.
+</div>`;
+
+return;
+
+}
+
+try{
+
+  const data = await apiFetch("/api/auth/signup", {
+    method: "POST",
+    body: JSON.stringify({ firstName: first, lastName: last, username, password }),
+  }, null);
+
+  authToken = data.token;
+  localStorage.setItem("springsToken", authToken);
+
+  message.innerHTML=
+  `<div class="success">
+  Account created successfully.
+  </div>`;
+
+  document.getElementById("userName").textContent = `${data.user.firstName} ${data.user.lastName}`;
+
+  await loadDashboardData();
+  showDashboard();
+
+}catch(err){
+
+  message.innerHTML =
+  `<div class="error">${err.message}</div>`;
+
+}
+
+}
+
+
+/* ==================================================
+   LOGIN
+================================================== */
+
+async function login(){
+
+const username=
+document.getElementById(
+"loginUsername"
+).value.trim().toLowerCase();
+
+const password=
+document.getElementById(
+"loginPassword"
+).value;
+
+const message=
+document.getElementById(
+"loginMessage"
+);
+
+if(!username || !password){
+
+message.innerHTML=
+`<div class="error">
+Please enter your username and password.
+</div>`;
+
+return;
+
+}
+
+try{
+
+  const data = await apiFetch("/api/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+  }, null);
+
+  authToken = data.token;
+  localStorage.setItem("springsToken", authToken);
+
+  document.getElementById(
+  "userName"
+  ).textContent=
+  `${data.user.firstName} ${data.user.lastName}`;
+
+  await loadDashboardData();
+  showDashboard();
+
+}catch(err){
+
+  message.innerHTML=
+  `<div class="error">${err.message}</div>`;
+
+}
+
+}
+
+
+/* ==================================================
+   LOGOUT
+================================================== */
+
+async function logout(){
+
+try{
+  await apiFetch("/api/auth/logout", { method: "POST" });
+}catch(e){
+  // ignore — we're clearing the local session regardless
+}
+
+authToken = null;
+localStorage.removeItem("springsToken");
+
+showLogin();
+
+}
+
+
+/* ==================================================
+   DEPOSIT METHOD
+================================================== */
+
+function selectDepositMethod(method){
+
+const form=
+document.getElementById(
+"depositForm"
+);
+
+if(method==="airtel"){
+
+  form.innerHTML=`
+    <div class="error">
+      Airtel Money deposits aren't available yet. Please use M-Pesa or
+      USDT/TRC20 to deposit — Airtel Money can still be used for withdrawals.
+    </div>
+  `;
+
+  return;
+
+}
+
+let title="";
+
+let description="";
+
+if(method==="mpesa"){
+
+title="M-Pesa deposit";
+
+description=
+"Enter the amount and M-Pesa phone number.";
+
+}
+
+if(method==="crypto"){
+
+title="USD / crypto deposit";
+
+description=
+"Enter the USD value you want to deposit. Exchange rate: 1 USD = Ksh 129.";
+
+}
+
+form.innerHTML=`
+
+<p class="eyebrow" style="margin:18px 0 6px;">${title}</p>
+
+<p class="small">
+${description}
+</p>
+
+${method==="mpesa" ? `<div class="till-box">
+  <div class="small">M-Pesa Till Number</div>
+  <div class="till-number" id="tillNumber">5367845</div>
+  <button class="copy-till" onclick="copyTillNumber()">${ICONS.copy} Copy till number</button>
+  <div id="copyTillMessage" class="small" style="margin-top:8px;"></div>
+</div>
+<div class="confirm-box">
+  <b class="small" style="color:var(--text);">How to deposit</b>
+  <ol class="small">
+    <li>Copy Till Number <b>5367845</b>.</li>
+    <li>Send your money to the Till using M-Pesa.</li>
+    <li>Enter the exact amount below.</li>
+    <li>Enter the M-Pesa transaction code/message for confirmation.</li>
+    <li>Submit the request. Your deposit stays <b>Pending</b> until admin verifies it.</li>
+  </ol>
+</div>
+<div class="field"><label>Amount sent (Ksh)</label><input type="number" id="depositAmount" placeholder="Amount sent" min="1"></div>
+<div class="field"><label>M-Pesa transaction code</label><input type="text" id="depositAccount" placeholder="e.g. QGH7XJ2K9P"></div>
+<div class="small">Do not submit a transaction code for a payment you have not actually made.</div>` : `<div class="row" style="background:var(--surface-2);flex-direction:column;align-items:stretch;">
+<b class="small" style="color:var(--text);">Exchange rate: 1 USD = Ksh 129</b>
+<div class="field"><label>Amount in Ksh</label><input type="number" id="depositAmount" placeholder="Enter Ksh amount" min="1" oninput="updateCryptoUSD()"></div>
+<div id="cryptoUSDPreview" class="small">USD value: $0.00</div>
+<div class="row-meta" style="margin-top:10px;">USDT TRC20 wallet address</div>
+<div class="small" style="word-break:break-all;background:var(--surface-3);padding:10px;border-radius:8px;margin-top:4px;">THbk25RVivpFAhBpmk42i6Udh5Li7b6pSv</div>
+<div class="small" style="margin-top:8px;">Send USDT using the TRC20 (TRON) network only.</div>
+</div>
+<div class="field"><label>Your transaction ID / hash</label><input type="text" id="depositAccount" placeholder="Paste your transaction ID"></div>` }
+
+<button
+class="btn btn-green"
+onclick="submitDeposit('${method}')">
+Continue deposit
+</button>
+
+<div id="depositMessage"></div>
+
+`;
+
+}
+
+
+/* ==================================================
+   SUBMIT DEPOSIT
+================================================== */
+
+function updateCryptoUSD(){const amount=parseFloat(document.getElementById("depositAmount")?.value)||0;const box=document.getElementById("cryptoUSDPreview");if(box)box.innerHTML=`USD value: <b>$${(amount/129).toFixed(2)}</b> (1 USD = Ksh 129)`;}
+
+const depositMethodMap = { mpesa: "mpesa", crypto: "usdt_trc20" };
+
+async function submitDeposit(method){
+
+  const amount =
+    parseFloat(document.getElementById("depositAmount").value);
+
+  const account =
+    document.getElementById("depositAccount").value.trim();
+
+  const message =
+    document.getElementById("depositMessage");
+
+  if(!amount || amount <= 0){
+    message.innerHTML =
+    `<div class="error">Enter a valid amount.</div>`;
+    return;
+  }
+
+  if(!account){
+    message.innerHTML =
+    `<div class="error">
+      Enter your payment/account details.
+    </div>`;
+    return;
+  }
+
+  const names = {
+    mpesa:"M-Pesa",
+    crypto:"USD / Crypto"
+  };
+
+  try{
+
+    const data = await apiFetch("/api/deposits", {
+      method: "POST",
+      body: JSON.stringify({ method: depositMethodMap[method], amount, reference: account }),
+    });
+
+    message.innerHTML =
+    `<div class="success">
+      <b>Deposit request submitted.</b>
+      <br>
+      Method: ${names[method]}
+      <br>
+      Amount: Ksh ${Number(data.deposit.amount).toLocaleString()}
+      <br>
+      ${method==="mpesa" ? `M-Pesa transaction code: <b>${account}</b><br>` : ""}
+      <br>
+      Status: <b>Pending admin verification.</b>
+    </div>`;
+
+    await loadDashboardData();
+
+  }catch(err){
+
+    message.innerHTML =
+    `<div class="error">${err.message}</div>`;
+
+  }
+
+}
+
+function updateWithdrawUSD(){
+  const amount =
+    parseFloat(document.getElementById("withdrawAmount")?.value) || 0;
+  const box =
+    document.getElementById("withdrawUSDPreview");
+
+  if(box){
+    box.innerHTML =
+      `USD equivalent: <b>$${(amount/129).toFixed(2)}</b> (1 USD = Ksh 129)`;
+  }
+}
+
+const withdrawMethodMap = { mpesa: "mpesa", airtel: "airtel", crypto: "usdt_trc20" };
+
+async function requestWithdraw(){
+
+  const amount =
+    parseFloat(document.getElementById("withdrawAmount").value);
+
+  const method =
+    document.getElementById("withdrawMethod").value;
+
+  const account =
+    document.getElementById("withdrawAccount").value.trim();
+
+  const message =
+    document.getElementById("withdrawMessage");
+
+  const minimumWithdrawal = 500;
+
+  if(!amount || amount <= 0){
+    message.innerHTML =
+    `<div class="error">Enter a valid amount.</div>`;
+    return;
+  }
+
+  if(amount < minimumWithdrawal){
+    message.innerHTML =
+    `<div class="error">
+      Minimum withdrawal amount is Ksh 500 ($3.88 at 1 USD = Ksh 129). Processing fee: Ksh 10.
+    </div>`;
+    return;
+  }
+
+  if(!account){
+    message.innerHTML =
+    `<div class="error">
+      Enter your account or wallet details.
+    </div>`;
+    return;
+  }
+
+  try{
+
+    const data = await apiFetch("/api/withdrawals", {
+      method: "POST",
+      body: JSON.stringify({ method: withdrawMethodMap[method], amount, account }),
+    });
+
+    const w = data.withdrawal;
+    const totalDeduction = Number(w.amount) + Number(w.fee);
+
+    message.innerHTML =
+    `<div class="success">
+      <b>Withdrawal request submitted.</b>
+      <br><br>
+      Withdrawal: Ksh ${Number(w.amount).toLocaleString()}
+      <br>
+      Processing fee: Ksh ${Number(w.fee).toLocaleString()}
+      <br>
+      <b>Total deducted: Ksh ${totalDeduction.toLocaleString()}</b>
+      <br><br>
+      Status: Pending verification.
+    </div>`;
+
+    document.getElementById("withdrawAmount").value = "";
+    document.getElementById("withdrawAccount").value = "";
+    updateWithdrawUSD();
+
+    await loadDashboardData();
+
+  }catch(err){
+
+    message.innerHTML =
+    `<div class="error">${err.message}</div>`;
+
+  }
+
+}
+
+
+/* ==================================================
+   MANUAL TILL
+================================================== */
+
+const MANUAL_MPESA_TILL = "5367845";
+
+async function copyTillNumber(){
+  const msg=document.getElementById("copyTillMessage");
+  try{
+    await navigator.clipboard.writeText(MANUAL_MPESA_TILL);
+    if(msg) msg.textContent="Till number copied.";
+  }catch(e){
+    const temp=document.createElement("input");
+    temp.value=MANUAL_MPESA_TILL;
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand("copy");
+    temp.remove();
+    if(msg) msg.textContent="Till number copied.";
+  }
+}
+
+
+/* ==================================================
+   ADMIN PANEL
+================================================== */
+
+function showAdminLogin(){
+  document.getElementById("loginPage").classList.add("hidden");
+  document.getElementById("signupPage").classList.add("hidden");
+  document.getElementById("dashboardPage").classList.add("hidden");
+  document.getElementById("walletPage").classList.add("hidden");
+  document.getElementById("adminPage").classList.add("hidden");
+  document.getElementById("adminLoginPage").classList.remove("hidden");
+}
+
+async function adminLogin(){
+
+  const username=document.getElementById("adminUsername").value.trim().toLowerCase();
+  const password=document.getElementById("adminPassword").value;
+  const message=document.getElementById("adminLoginMessage");
+
+  if(!username || !password){
+    message.innerHTML = `<div class="error">Enter the admin username and password.</div>`;
+    return;
+  }
+
+  try{
+
+    const data = await apiFetch("/api/admin/login", {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+    }, null);
+
+    adminToken = data.token;
+    localStorage.setItem("springsAdminToken", adminToken);
+
+    document.getElementById("adminLoginPage").classList.add("hidden");
+    document.getElementById("adminPage").classList.remove("hidden");
+
+    await refreshAdmin();
+
+  }catch(err){
+
+    message.innerHTML = `<div class="error">${err.message}</div>`;
+
+  }
+
+}
+
+function adminLogout(){
+  adminToken=null;
+  localStorage.removeItem("springsAdminToken");
+  document.getElementById("adminPage").classList.add("hidden");
+  showLogin();
+}
+
+function renderAdminStats(stats){
+  document.getElementById("adminStats").innerHTML=`
+    <div class="stat-card"><div class="stat-label">Users</div><div class="stat-value">${stats.users}</div></div>
+    <div class="stat-card"><div class="stat-label">Pending deposits</div><div class="stat-value">${stats.pendingDeposits}</div></div>
+    <div class="stat-card"><div class="stat-label">Pending withdrawals</div><div class="stat-value">${stats.pendingWithdrawals}</div></div>
+    <div class="stat-card"><div class="stat-label">Total wallet balance</div><div class="stat-value">Ksh ${formatKsh(stats.totalBalance)}</div></div>
+  `;
+}
+
+function renderAdminUsers(users){
+  document.getElementById("adminUsers").innerHTML = users.length ? users.map(u=>`
+    <div class="row">
+      <div class="row-body">
+        <div class="row-title">${u.firstName} ${u.lastName} <span class="row-method">@${u.username}</span></div>
+        <div class="row-meta">${u.role} · ${u.isActive ? "Active" : "Disabled"} · Joined ${new Date(u.createdAt).toLocaleString()}</div>
+      </div>
+    </div>`).join("") : `<p class="empty-note">No users yet.</p>`;
+}
+
+function renderAdminDeposits(deposits){
+  document.getElementById("adminDeposits").innerHTML = deposits.length ? deposits.map(d=>`
+    <div class="row">
+      <div class="row-body">
+        <div class="row-title">${d.username} <span class="row-method">${d.method}</span></div>
+        <div class="row-meta">Ref ${d.reference} · <span class="${pillClass(d.status)}">${d.status}</span> · ${new Date(d.createdAt).toLocaleString()}</div>
+        ${d.status === "pending" ? `
+        <div class="row-actions">
+          <button class="btn btn-green" onclick="adminDecision('deposit',${d.id},'approve')">Approve</button>
+          <button class="btn btn-red" onclick="adminDecision('deposit',${d.id},'reject')">Reject</button>
+        </div>` : ""}
+      </div>
+      <div class="row-amount credit">Ksh ${formatKsh(d.amount)}</div>
+    </div>`).join("") : `<p class="empty-note">No deposit requests.</p>`;
+}
+
+function renderAdminWithdrawals(withdrawals){
+  document.getElementById("adminWithdrawals").innerHTML = withdrawals.length ? withdrawals.map(w=>`
+    <div class="row">
+      <div class="row-body">
+        <div class="row-title">${w.username} <span class="row-method">${w.method}</span></div>
+        <div class="row-meta">To ${w.destination} · <span class="${pillClass(w.status)}">${w.status}</span> · ${new Date(w.createdAt).toLocaleString()}</div>
+        ${w.status === "pending" ? `
+        <div class="row-actions">
+          <button class="btn btn-green" onclick="adminDecision('withdrawal',${w.id},'approve')">Approve</button>
+          <button class="btn btn-red" onclick="adminDecision('withdrawal',${w.id},'reject')">Reject</button>
+        </div>` : ""}
+      </div>
+      <div>
+        <div class="row-amount debit">Ksh ${formatKsh(w.amount)}</div>
+        <div class="row-sub">Fee Ksh ${formatKsh(w.fee)}</div>
+      </div>
+    </div>`).join("") : `<p class="empty-note">No withdrawal requests.</p>`;
+}
+
+function renderAdminActivity(activity){
+  document.getElementById("adminActivity").innerHTML = activity.length ? activity.map(a=>`
+    <div class="row">
+      <div class="row-body">
+        <div class="row-title">${a.action.replace(/_/g," ")} <span class="row-method">${a.adminUsername || "system"}</span></div>
+        <div class="row-meta">${a.description || ""} ${a.description ? "·" : ""} ${new Date(a.createdAt).toLocaleString()}</div>
+      </div>
+    </div>`).join("") : `<p class="empty-note">No activity yet.</p>`;
+}
+
+async function refreshAdmin(){
+
+  try{
+
+    const [statsRes, usersRes, depositsRes, withdrawalsRes, activityRes] = await Promise.all([
+      apiFetch("/api/admin/stats", {}, adminToken),
+      apiFetch("/api/admin/users", {}, adminToken),
+      apiFetch("/api/admin/deposits", {}, adminToken),
+      apiFetch("/api/admin/withdrawals", {}, adminToken),
+      apiFetch("/api/admin/activity", {}, adminToken),
+    ]);
+
+    renderAdminStats(statsRes.stats);
+    renderAdminUsers(usersRes.users);
+    renderAdminDeposits(depositsRes.deposits);
+    renderAdminWithdrawals(withdrawalsRes.withdrawals);
+    renderAdminActivity(activityRes.activity);
+
+  }catch(err){
+
+    document.getElementById("adminStats").innerHTML = `<div class="error">${err.message}</div>`;
+
+  }
+
+}
+
+async function adminDecision(type, id, decision){
+
+  try{
+    await apiFetch(`/api/admin/${type}s/${id}/${decision}`, { method: "POST" }, adminToken);
+    await refreshAdmin();
+  }catch(err){
+    alert(err.message);
+  }
+
+}
+
+
+/* ==================================================
+   PRODUCTS
+================================================== */
+
+function loadProducts(){
+
+const prodDiv=
+document.getElementById("products");
+
+const select=
+document.getElementById("productSelect");
+
+prodDiv.innerHTML="";
+select.innerHTML="";
+
+for(let name in products){
+
+const p=products[name];
+const popular = name === "Gold";
+
+prodDiv.innerHTML+=`
+
+<div class="tier-card ${popular ? "popular" : ""}">
+
+${popular ? `<span class="tier-badge">Popular</span>` : ""}
+
+<div class="tier-name">${name}</div>
+
+<div class="tier-rate">${p.rate*100}%<span> / ${p.hours}h</span></div>
+
+<div class="tier-range">Ksh ${p.min.toLocaleString()} – Ksh ${p.max.toLocaleString()}</div>
+
+<div class="tier-example">Ksh ${p.min.toLocaleString()} → Ksh ${(p.min*(1+p.rate)).toLocaleString()}</div>
+
+<button class="btn btn-green" onclick="selectInvestment('${name}')">
+Invest in ${name}
+</button>
+
+</div>
+
+`;
+
+select.innerHTML+=`<option value="${name}">${name}</option>`;
+
+}
+
+}
+
+
+/* ==================================================
+   CALCULATOR
+================================================== */
+
+function selectInvestment(name){
+
+const select=document.getElementById("productSelect");
+const amountInput=document.getElementById("amountInput");
+const result=document.getElementById("calcResult");
+const p=products[name];
+
+select.value=name;
+
+result.innerHTML=`
+<div class="success">
+<b>${name} package selected.</b>
+<br><br>
+Investment range:
+<b>Ksh ${p.min.toLocaleString()} - Ksh ${p.max.toLocaleString()}</b>
+<br>
+Duration: <b>${p.hours} hours</b>
+<br>
+Displayed return: <b>${p.rate*100}%</b>
+<br><br>
+Enter the amount you want to invest below, then tap
+<b>Calculate payout</b>.
+</div>
+`;
+
+amountInput.scrollIntoView({behavior:"smooth",block:"center"});
+setTimeout(()=>amountInput.focus(),400);
+
+}
+
+
+function calculate(){
+
+const name=
+document.getElementById(
+"productSelect"
+).value;
+
+const amount=
+parseFloat(
+document.getElementById(
+"amountInput"
+).value
+);
+
+const result=
+document.getElementById(
+"calcResult"
+);
+
+const p=products[name];
+
+if(
+isNaN(amount)||
+amount<p.min||
+amount>p.max
+){
+
+result.innerHTML=
+`<div class="error">
+Amount must be between
+Ksh ${p.min.toLocaleString()}
+and
+Ksh ${p.max.toLocaleString()}.
+</div>`;
+
+lastCalculation = null;
+
+return;
+
+}
+
+const profit=
+amount*p.rate;
+
+const payout=
+amount+profit;
+
+const mature=
+new Date(
+Date.now()+
+p.hours*60*60*1000
+);
+
+lastCalculation = { name, amount };
+
+result.innerHTML=`
+
+<div class="result">
+
+<b>Product:</b>
+${name}
+
+<br>
+
+<b>Investment:</b>
+Ksh ${amount.toLocaleString()}
+
+<br>
+
+<b>Displayed profit:</b>
+Ksh ${profit.toLocaleString()}
+
+<br>
+
+<b>Displayed total:</b>
+Ksh ${payout.toLocaleString()}
+
+<br>
+
+<b>Example maturity:</b>
+${mature.toLocaleString()}
+
+</div>
+
+<button class="btn btn-green" onclick="confirmInvestment()">
+Confirm &amp; invest
+</button>
+
+`;
+
+}
+
+
+async function confirmInvestment(){
+
+  if(!lastCalculation) return;
+
+  const p = products[lastCalculation.name];
+  const result = document.getElementById("calcResult");
+
+  try{
+
+    const data = await apiFetch("/api/investments", {
+      method: "POST",
+      body: JSON.stringify({ productId: p.id, amount: lastCalculation.amount }),
+    });
+
+    const inv = data.investment;
+
+    result.innerHTML = `
+      <div class="success">
+        <b>Investment confirmed.</b>
+        <br><br>
+        Invested: Ksh ${Number(inv.amount).toLocaleString()}
+        <br>
+        Expected profit: Ksh ${Number(inv.profit).toLocaleString()}
+        <br>
+        Expected payout: Ksh ${Number(inv.expectedPayout).toLocaleString()}
+        <br>
+        Matures: ${new Date(inv.maturityDate).toLocaleString()}
+      </div>
+    `;
+
+    lastCalculation = null;
+
+    await loadDashboardData();
+
+  }catch(err){
+
+    result.innerHTML = `<div class="error">${err.message}</div>`;
+
+  }
+
+}
+
+
+/* ==================================================
+   GEM ADVISOR
+================================================== */
+
+function askAI(){
+
+const q=
+document.getElementById(
+"chatInput"
+).value.trim().toLowerCase();
+
+const reply=
+document.getElementById(
+"chatReply"
+);
+
+const g=products.Gem;
+
+if(!q){
+
+reply.innerHTML=
+`<div class="error">
+Please enter a question.
+</div>`;
+
+return;
+
+}
+
+if(!g){
+
+reply.innerHTML=
+`<div class="error">
+Product information isn't loaded yet. Please log in first.
+</div>`;
+
+return;
+
+}
+
+const nums=
+q.match(/\d+(?:,\d+)?/g);
+
+let amount=g.min;
+
+if(nums){
+
+amount=parseFloat(
+nums[0].replace(/,/g,"")
+);
+
+}
+
+if(
+amount<g.min||
+amount>g.max
+){
+
+reply.innerHTML=
+`<div class="error">
+Gem range:
+Ksh ${g.min.toLocaleString()}
+-
+Ksh ${g.max.toLocaleString()}
+</div>`;
+
+return;
+
+}
+
+const profit=
+amount*g.rate;
+
+const payout=
+amount+profit;
+
+reply.innerHTML=`
+
+<div class="result">
+
+<b>Gem package</b>
+
+<br><br>
+
+Investment:
+Ksh ${amount.toLocaleString()}
+
+<br>
+
+Displayed rate:
+${g.rate*100}%
+
+<br>
+
+Displayed profit:
+Ksh ${profit.toLocaleString()}
+
+<br>
+
+Displayed total:
+Ksh ${payout.toLocaleString()}
+
+<br>
+
+Duration:
+${g.hours} hours
+
+</div>
+
+`;
+
+}
+
+
+/* ==================================================
+   TERMS
+================================================== */
+
+function showTerms(){
+
+document.getElementById(
+"termsModal"
+).classList.remove("hidden");
+
+}
+
+function closeTerms(){
+
+document.getElementById(
+"termsModal"
+).classList.add("hidden");
+
+}
+
+
+/* ==================================================
+   FORGOT PASSWORD
+================================================== */
+
+function forgotPassword(){
+
+document.getElementById(
+"forgotModal"
+).classList.remove("hidden");
+
+}
+
+function closeForgot(){
+
+document.getElementById(
+"forgotModal"
+).classList.add("hidden");
+
+}
+
+async function resetPassword(){
+
+const username=
+document.getElementById(
+"resetUsername"
+).value.trim().toLowerCase();
+
+const password=
+document.getElementById(
+"resetPassword"
+).value;
+
+const confirm=
+document.getElementById(
+"resetConfirm"
+).value;
+
+const message=
+document.getElementById(
+"resetMessage"
+);
+
+if(!username){
+
+message.innerHTML=
+`<div class="error">
+Enter your username.
+</div>`;
+
+return;
+
+}
+
+if(password.length<6){
+
+message.innerHTML=
+`<div class="error">
+Password must contain at least 6 characters.
+</div>`;
+
+return;
+
+}
+
+if(password!==confirm){
+
+message.innerHTML=
+`<div class="error">
+Passwords do not match.
+</div>`;
+
+return;
+
+}
+
+try{
+
+  const requestData = await apiFetch("/api/auth/forgot-password", {
+    method: "POST",
+    body: JSON.stringify({ username }),
+  }, null);
+
+  if(!requestData.resetToken){
+    message.innerHTML=
+    `<div class="error">
+      If an account exists for that username, a password reset would normally
+      be sent to you now. This deployment isn't configured to deliver reset
+      codes yet — please contact support.
+    </div>`;
+    return;
+  }
+
+  await apiFetch("/api/auth/reset-password", {
+    method: "POST",
+    body: JSON.stringify({ token: requestData.resetToken, password }),
+  }, null);
+
+  message.innerHTML=
+  `<div class="success">
+  Password successfully changed. You can now log in.
+  </div>`;
+
+}catch(err){
+
+  message.innerHTML=
+  `<div class="error">${err.message}</div>`;
+
+}
+
+}
+
+
+/* ==================================================
+   CHECK LOGIN
+================================================== */
+
+async function checkLogin(){
+
+if(authToken){
+
+  try{
+
+    const me = await apiFetch("/api/users/me");
+
+    document.getElementById(
+    "userName"
+    ).textContent=
+    `${me.user.firstName} ${me.user.lastName}`;
+
+    await loadDashboardData();
+    showDashboard();
+    return;
+
+  }catch(e){
+
+    authToken = null;
+    localStorage.removeItem("springsToken");
+
+  }
+
+}
+
+showLogin();
+
+}
+
+
+/* ==================================================
+   START
+================================================== */
+
+checkLogin();
+
+</script>
+
+</body>
+</html>
