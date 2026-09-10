@@ -8,7 +8,10 @@
     "dev": "nodemon server.js",
     "test": "for f in server.js src/database/db.js src/routes/*.js src/controllers/*.js src/middleware/*.js src/services/*.js src/models/*.js src/validators/*.js src/scripts/*.js; do node --check \"$f\" || exit 1; done",
     "db:init": "node -e \"require('dotenv').config(); const fs=require('fs'); const {query,pool}=require('./src/database/db'); query(fs.readFileSync('src/database/schema.sql','utf8')).then(()=>{console.log('Database schema initialized'); return pool.end();}).catch(error=>{console.error(error); process.exitCode=1; return pool.end();})\"",
-    "admin:create": "node src/scripts/create-admin.js"
+    "admin:create": "node src/scripts/create-admin.js",
+    "db:backup": "node src/scripts/backup-db.js",
+    "db:backup:list": "ls -lh backups/ 2>/dev/null || echo 'No backups yet — run npm run db:backup'",
+    "db:restore": "node src/scripts/restore-db.js"
   },
   "keywords": [],
   "author": "",

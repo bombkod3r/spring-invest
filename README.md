@@ -114,6 +114,34 @@ Re-running `admin:create` with the same `ADMIN_USERNAME` updates that account's 
 3. Log in as admin in another browser tab (or after logging out) and approve the deposit — the user's wallet balance updates.
 4. Back as the user, invest in a product and request a withdrawal — note the wallet balance is debited immediately when a withdrawal is requested (funds are reserved), and refunded automatically if the admin rejects it.
 
+## Backups & recovery
+
+Real user accounts and wallet balances live in this database — treat it accordingly.
+
+### Taking a backup
+
+```bash
+npm run db:backup          # writes a timestamped dump to backups/ (gitignored)
+npm run db:backup:list     # see what backups exist
+```
+
+Take one before running any destructive command by hand (`DELETE`, `TRUNCATE`, `DROP TABLE`), before a schema migration, and periodically in general. Never run a wildcard delete like `DELETE FROM users WHERE ...` scoped to anything broader than the exact test usernames you created — it's indistinguishable from deleting a real signed-up user until it's too late to undo.
+
+### Recovering from a backup
+
+If data gets lost or corrupted (an accidental delete, a bad migration, anything):
+
+1. **Stop the server first** — `lsof -ti:5000 -sTCP:LISTEN | xargs -r kill` — so nothing writes to the database mid-restore.
+2. **Back up the current (broken) state anyway**, just in case the "broken" state still has something worth keeping: `npm run db:backup`.
+3. **Pick the backup to restore** from `npm run db:backup:list` — usually the most recent one from *before* the problem happened.
+4. **Restore it**:
+   ```bash
+   npm run db:restore -- backups/springs-invests-<timestamp>.dump
+   ```
+   This drops and replaces existing tables with the backup's contents — it's whole-database recovery, not a merge. Anything written after that backup's timestamp is lost.
+5. **Restart the server** (`npm run dev` or `npm start`) and confirm with `curl http://localhost:5000/api/health`.
+6. **Verify the data**: `psql "$DATABASE_URL" -c "SELECT id, username FROM users;"` (or check via the admin panel) to confirm the accounts you expected are back.
+
 ## Project structure
 
 ```

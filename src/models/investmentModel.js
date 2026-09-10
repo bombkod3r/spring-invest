@@ -27,8 +27,8 @@ const create = async (client, { userId, productId, amount, profit, expectedPayou
 
 const listForUser = async (userId) => {
   const result = await query(
-    `SELECT i.id, i.product_id AS "productId", p.name AS "productName", i.amount, i.profit,
-            i.expected_payout AS "expectedPayout", i.status, i.start_date AS "startDate",
+    `SELECT i.id, i.product_id AS "productId", p.name AS "productName", p.duration_hours AS "durationHours",
+            i.amount, i.profit, i.expected_payout AS "expectedPayout", i.status, i.start_date AS "startDate",
             i.maturity_date AS "maturityDate", i.completed_at AS "completedAt"
      FROM investments i JOIN investment_products p ON p.id = i.product_id
      WHERE i.user_id = $1 ORDER BY i.start_date DESC, i.id DESC`,
@@ -39,8 +39,8 @@ const listForUser = async (userId) => {
 
 const findForUserById = async (userId, id) => {
   const result = await query(
-    `SELECT i.id, i.product_id AS "productId", p.name AS "productName", i.amount, i.profit,
-            i.expected_payout AS "expectedPayout", i.status, i.start_date AS "startDate",
+    `SELECT i.id, i.product_id AS "productId", p.name AS "productName", p.duration_hours AS "durationHours",
+            i.amount, i.profit, i.expected_payout AS "expectedPayout", i.status, i.start_date AS "startDate",
             i.maturity_date AS "maturityDate", i.completed_at AS "completedAt"
      FROM investments i JOIN investment_products p ON p.id = i.product_id
      WHERE i.user_id = $1 AND i.id = $2`,

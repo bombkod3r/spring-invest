@@ -2,11 +2,11 @@ const express = require('express');
 const adminController = require('../controllers/adminController');
 const { requireAuth } = require('../middleware/auth');
 const { requireAdmin } = require('../middleware/adminAuth');
-const { authLimiter } = require('../middleware/rateLimit');
+const { createAuthLimiter } = require('../middleware/rateLimit');
 
 const router = express.Router();
 
-router.post('/login', authLimiter, adminController.adminLogin);
+router.post('/login', createAuthLimiter(), adminController.adminLogin);
 
 router.use(requireAuth, requireAdmin);
 

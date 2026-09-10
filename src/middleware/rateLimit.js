@@ -1,6 +1,9 @@
 const rateLimit = require('express-rate-limit');
 
-const authLimiter = rateLimit({
+// A fresh instance per call — each has its own counter, so heavy traffic on
+// one auth endpoint (e.g. admin login) never eats into another's quota
+// (e.g. a real user's login attempts) just because they share the config.
+const createAuthLimiter = () => rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 10,
   standardHeaders: true,
@@ -16,4 +19,4 @@ const apiLimiter = rateLimit({
   message: { error: 'Too many requests, please try again later' },
 });
 
-module.exports = { authLimiter, apiLimiter };
+module.exports = { createAuthLimiter, apiLimiter };

@@ -4,7 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<script>
+// Applied before first paint so a saved light-mode choice doesn't flash dark first.
+(function(){
+  try{
+    var stored = localStorage.getItem("springsTheme");
+    if(stored === "light" || stored === "dark"){
+      document.documentElement.setAttribute("data-theme", stored);
+    }
+  }catch(e){}
+})();
+</script>
+
 <title>Springs Invests</title>
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23caa057'/%3E%3Ctext x='16' y='23' font-family='Arial,Helvetica,sans-serif' font-size='19' font-weight='800' text-anchor='middle' fill='%231c1305'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23caa057'/%3E%3Ctext x='16' y='23' font-family='Arial,Helvetica,sans-serif' font-size='19' font-weight='800' text-anchor='middle' fill='%231c1305'%3ES%3C/text%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,6 +56,36 @@
   --font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 
+:root[data-theme="light"]{
+  --bg:#f5f6f8;
+  --surface:#ffffff;
+  --surface-2:#f1f2f5;
+  --surface-3:#e7e9ee;
+  --border:rgba(15,23,42,.10);
+  --border-strong:rgba(15,23,42,.18);
+  --text:#14161c;
+  --text-dim:#5b6272;
+  --text-faint:#8b93a3;
+  --accent:#b8863f;
+  --accent-hover:#a5762f;
+  --accent-ink:#1c1305;
+  --accent-wash:rgba(184,134,63,.14);
+  --success:#1f8f63;
+  --success-bg:rgba(31,143,99,.10);
+  --success-border:rgba(31,143,99,.30);
+  --danger:#c8402f;
+  --danger-bg:rgba(200,64,47,.10);
+  --danger-border:rgba(200,64,47,.28);
+  --warn:#a97417;
+  --warn-bg:rgba(169,116,23,.12);
+  --shadow-sm:0 1px 2px rgba(15,23,42,.05), 0 8px 24px rgba(15,23,42,.08);
+}
+
+:root[data-theme="light"] .accent-text{
+  background:linear-gradient(90deg,#8a6023,#b8863f);
+  -webkit-background-clip:text;background-clip:text;
+}
+
 *{box-sizing:border-box;}
 
 body{
@@ -60,9 +105,12 @@ b{font-weight:600;}
 /* ---------- header ---------- */
 
 .app-header{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  margin-bottom:30px;
+  max-width:960px;margin:0 auto 30px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding-bottom:16px;
+  border-bottom:1px solid var(--border);
 }
+.brand{display:flex;align-items:center;gap:10px;}
 .brand-mark{
   width:32px;height:32px;border-radius:9px;flex-shrink:0;
   background:var(--accent);color:var(--accent-ink);
@@ -70,6 +118,45 @@ b{font-weight:600;}
   font-weight:800;font-size:15px;letter-spacing:0;
 }
 .brand-name{font-size:16px;font-weight:600;letter-spacing:-.01em;color:var(--text);}
+
+.app-header-right{display:flex;align-items:center;gap:16px;}
+.app-nav{display:flex;align-items:center;gap:16px;}
+.app-nav .link{font-size:13.5px;}
+.nav-cta{
+  background:var(--accent);color:var(--accent-ink);
+  border:none;padding:9px 18px;border-radius:999px;
+  font-weight:600;font-size:13px;font-family:inherit;
+  cursor:pointer;white-space:nowrap;
+  transition:background .15s ease;
+}
+.nav-cta:hover{background:var(--accent-hover);}
+
+.app-account{display:flex;align-items:center;gap:14px;}
+.account-greeting{font-size:13.5px;color:var(--text-dim);white-space:nowrap;}
+.account-greeting b{color:var(--text);font-weight:600;}
+.btn-nav-secondary{
+  background:var(--surface-2);color:var(--text);
+  border:1px solid var(--border-strong);
+  padding:8px 16px;border-radius:999px;
+  font-weight:600;font-size:12.5px;font-family:inherit;
+  cursor:pointer;white-space:nowrap;
+  transition:background .15s ease,border-color .15s ease;
+}
+.btn-nav-secondary:hover{background:var(--surface-3);border-color:var(--accent);}
+
+.theme-toggle{
+  width:34px;height:34px;border-radius:10px;flex-shrink:0;
+  background:var(--surface-2);border:1px solid var(--border);
+  color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s ease,color .15s ease,border-color .15s ease;
+}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
+
+@media(max-width:460px){
+  .app-nav .link{display:none;}
+  .account-greeting{display:none;}
+}
 
 /* ---------- layout primitives ---------- */
 
@@ -176,17 +263,6 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 .icon{display:inline-flex;align-items:center;justify-content:center;line-height:0;flex-shrink:0;}
 .icon svg{width:18px;height:18px;display:block;}
 
-/* ---------- top bar ---------- */
-
-.topbar{
-  display:flex;justify-content:space-between;align-items:center;gap:10px;
-  max-width:440px;margin:0 auto 18px;
-}
-.topbar.wide{max-width:720px;}
-.topbar .greeting{font-size:15px;color:var(--text-dim);font-weight:500;}
-.topbar .greeting b{color:var(--text);font-weight:600;}
-.logout-btn{width:auto;margin:0;padding:9px 14px;font-size:12.5px;}
-
 /* ---------- balance card ---------- */
 
 .balance-card{
@@ -291,8 +367,50 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 /* ---------- product tiers ---------- */
 
 .products{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;
 }
+
+.dashboard-content{max-width:880px;margin:0 auto;}
+
+/* Everything in the dashboard shares the same left edge and full column
+   width — the .balance-card/.chat/.container defaults (440px, centered) are
+   tuned for standalone narrow pages like login/wallet, not this wide column. */
+.dashboard-content .balance-card,
+.dashboard-content .wallet-actions,
+.dashboard-content .section{
+  max-width:none;
+  margin-left:0;
+  margin-right:0;
+}
+.dashboard-content .section .container{
+  max-width:480px;
+  margin-left:0;
+  margin-right:0;
+}
+.dashboard-content .chat{
+  max-width:480px;
+  margin:20px 0 0;
+}
+
+.investments-empty{
+  background:var(--surface);border:1px dashed var(--border-strong);border-radius:var(--radius-lg);
+  padding:26px 20px;text-align:center;
+}
+.investments-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;
+}
+.investment-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:18px;display:flex;flex-direction:column;gap:5px;
+}
+.investment-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.investment-card-name{font-weight:700;font-size:14.5px;}
+.investment-card-amount{font-size:22px;font-weight:700;letter-spacing:-.01em;margin:2px 0 2px;font-variant-numeric:tabular-nums;}
+.investment-card-footer{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-top:10px;padding-top:10px;border-top:1px solid var(--border);
+}
+
 .tier-card{
   position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
   padding:20px;display:flex;flex-direction:column;gap:10px;
@@ -392,10 +510,87 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 
 .small{font-size:12.5px;color:var(--text-dim);}
 
+/* ---------- landing hero ---------- */
+
+.hero{
+  position:relative;
+  max-width:600px;
+  margin:10px auto 40px;
+  padding:44px 32px 36px;
+  text-align:center;
+  overflow:hidden;
+  border-radius:28px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+}
+.hero::before{
+  content:"";
+  position:absolute;
+  width:360px;height:360px;
+  background:radial-gradient(circle, rgba(202,160,87,.30), transparent 70%);
+  top:-190px;right:-140px;
+  pointer-events:none;
+}
+.hero::after{
+  content:"";
+  position:absolute;
+  width:280px;height:280px;
+  background:radial-gradient(circle, rgba(63,174,130,.14), transparent 70%);
+  bottom:-160px;left:-120px;
+  pointer-events:none;
+}
+.hero-graphic{position:relative;width:180px;margin:0 auto 22px;}
+.hero-graphic svg{width:100%;display:block;}
+.hero-title{
+  position:relative;
+  font-size:36px;line-height:1.16;font-weight:800;letter-spacing:-.02em;
+  margin:0 0 16px;color:var(--text);
+}
+.hero-title .accent-text{
+  background:linear-gradient(90deg,var(--accent),#f0d190);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-sub{
+  position:relative;
+  font-size:15.5px;color:var(--text-dim);line-height:1.65;
+  max-width:420px;margin:0 auto 30px;
+}
+.hero-actions{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:32px;}
+.hero-cta{max-width:280px;padding:15px 22px;font-size:15px;box-shadow:0 10px 24px rgba(202,160,87,.25);}
+.hero-actions .link{font-size:13.5px;}
+.hero-highlights{
+  position:relative;
+  display:flex;flex-wrap:wrap;justify-content:center;gap:10px;
+  padding-top:26px;border-top:1px solid var(--border);
+}
+.hero-chip{
+  font-size:11.5px;font-weight:500;color:var(--text-dim);
+  background:var(--surface-2);border:1px solid var(--border);
+  padding:7px 13px;border-radius:999px;
+}
+.hero-note{
+  position:relative;
+  font-size:11.5px;color:var(--text-faint);
+  margin:14px 0 0;
+}
+
+.landing-support{
+  max-width:600px;margin:20px auto 0;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  color:var(--text-dim);font-size:13.5px;
+}
+.landing-support .icon{color:var(--text-faint);}
+.landing-support a{color:var(--accent);font-weight:600;text-decoration:none;}
+.landing-support a:hover{color:var(--accent-hover);text-decoration:underline;}
+
 @media(max-width:520px){
   body{padding:18px 12px 60px;}
   .balance{font-size:28px;}
   .container{padding:20px;}
+  .hero{padding:36px 22px 28px;border-radius:22px;}
+  .hero-title{font-size:29px;}
+  .hero-graphic{width:150px;}
 }
 
 </style>
@@ -404,16 +599,94 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 <body>
 
 <header class="app-header">
+<div class="brand">
 <span class="brand-mark">S</span>
 <span class="brand-name">Springs Invests</span>
+</div>
+<div class="app-header-right">
+
+<nav class="app-nav hidden" id="appNav">
+<span class="link" onclick="showLogin()">Log in</span>
+<button class="nav-cta" onclick="showSignup()">Sign up</button>
+</nav>
+
+<div class="app-account hidden" id="appAccount">
+<span class="account-greeting">Hi, <b id="userName"></b></span>
+<button class="btn-nav-secondary" onclick="logout()">Logout</button>
+</div>
+
+<div class="app-account hidden" id="appAdminAccount">
+<span class="account-greeting">Admin</span>
+<button class="btn-nav-secondary" onclick="adminLogout()">Logout</button>
+</div>
+
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light and dark mode">
+<span class="icon" id="themeToggleIcon"></span>
+</button>
+</div>
 </header>
+
+
+<!-- ==================================================
+     LANDING
+================================================== -->
+
+<div id="landingPage">
+
+<div class="hero">
+
+<div class="hero-graphic">
+<svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="heroFade" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#caa057" stop-opacity="0.35"/>
+<stop offset="100%" stop-color="#caa057" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<path d="M4 55 L40 42 L76 48 L112 24 L148 30 L196 6 L196 70 L4 70 Z" fill="url(#heroFade)"/>
+<path d="M4 55 L40 42 L76 48 L112 24 L148 30 L196 6" fill="none" stroke="#caa057" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="196" cy="6" r="4" fill="#caa057"/>
+</svg>
+</div>
+
+<h1 class="hero-title">Grow Your Money<br><span class="accent-text">With a Plan.</span></h1>
+
+<p class="hero-sub">
+Explore investment options, monitor your portfolio, and manage your account from your phone.
+</p>
+
+<div class="hero-actions">
+<button class="btn hero-cta" onclick="showSignup()">Create free account</button>
+<span class="link" onclick="showLogin()">I already have an account →</span>
+</div>
+
+<div class="hero-highlights">
+<span class="hero-chip">5 investment tiers</span>
+<span class="hero-chip">M-Pesa &amp; USDT deposits</span>
+<span class="hero-chip">Admin-reviewed withdrawals</span>
+</div>
+
+<p class="hero-note">Invest wisely — start small, and never invest more than you can afford to lose.</p>
+
+</div>
+
+<div class="landing-support">
+<span class="icon" id="supportIcon"></span>
+Need help? Call or WhatsApp <a href="tel:+254782682308">0782 682 308</a>
+</div>
+
+</div>
 
 
 <!-- ==================================================
      LOGIN
 ================================================== -->
 
-<div id="loginPage" class="container">
+<div id="loginPage" class="container hidden">
+
+<p style="text-align:left;margin-bottom:14px;">
+<span class="link small" onclick="showLanding()">← Back</span>
+</p>
 
 <h2>Welcome back</h2>
 <p class="small" style="margin-bottom:18px;">Log in to manage your wallet and investments.</p>
@@ -456,6 +729,10 @@ Administrator login
 ================================================== -->
 
 <div id="signupPage" class="container hidden">
+
+<p style="text-align:left;margin-bottom:14px;">
+<span class="link small" onclick="showLanding()">← Back</span>
+</p>
 
 <h2>Create your account</h2>
 <p class="small" style="margin-bottom:18px;">It only takes a minute to get started.</p>
@@ -513,11 +790,7 @@ Already have an account?
 
 <div id="dashboardPage" class="hidden">
 
-<div class="topbar">
-<div class="greeting">Hello, <b id="userName"></b></div>
-<button class="btn btn-secondary logout-btn" onclick="logout()">Logout</button>
-</div>
-
+<div class="dashboard-content">
 
 <!-- BALANCE -->
 
@@ -543,6 +816,18 @@ Deposit funds
 </div>
 
 
+<!-- ACTIVE INVESTMENTS -->
+
+<div class="section">
+<div class="section-head"><p class="eyebrow">Active investments</p></div>
+<div id="activeInvestments">
+<div class="investments-empty">
+<p class="empty-note">No active investments yet — pick a product below to get started.</p>
+</div>
+</div>
+</div>
+
+
 <div class="section">
 <div class="section-head"><p class="eyebrow">Investment products</p></div>
 <div class="products" id="products"></div>
@@ -551,7 +836,7 @@ Deposit funds
 
 <!-- CALCULATOR -->
 
-<div class="section" style="max-width:440px;">
+<div class="section">
 <p class="eyebrow">Investment calculator</p>
 <div class="container" style="margin-top:12px;">
 
@@ -586,6 +871,8 @@ Deposit funds
 <button class="btn" onclick="askAI()">Ask</button>
 
 <div id="chatReply" style="margin-top:4px;"></div>
+
+</div>
 
 </div>
 
@@ -711,16 +998,6 @@ Deposit funds
 <div id="transactions"></div>
 </div>
 
-
-<!-- INVESTMENTS -->
-
-<div class="container">
-<p class="eyebrow" style="margin-bottom:4px;">Active investments</p>
-<div id="activeInvestments">
-<p class="empty-note">No active investments yet.</p>
-</div>
-</div>
-
 </div>
 
 
@@ -760,9 +1037,8 @@ Deposit funds
 
 <div id="adminPage" class="hidden">
 
-<div class="topbar wide">
-<div class="greeting"><b>Admin dashboard</b></div>
-<button class="btn btn-secondary logout-btn" onclick="adminLogout()">Logout</button>
+<div class="section" style="max-width:720px;">
+<h2 style="font-size:20px;">Admin dashboard</h2>
 </div>
 
 <div class="container wide" style="max-width:720px;">
@@ -871,6 +1147,8 @@ const ICONS = {
   coin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5c0-1.1 1.1-2 2.5-2s2.5.9 2.5 2-1.1 1.6-2.5 2-2.5.9-2.5 2 1.1 2 2.5 2 2.5-.9 2.5-2"/></svg>',
   shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
   chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="20" y2="20"/><rect x="6" y="12" width="3" height="6"/><rect x="11" y="8" width="3" height="10"/><rect x="16" y="4" width="3" height="14"/></svg>',
+  sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
+  moon: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
 };
 
 function paintIcon(id, name){
@@ -889,7 +1167,30 @@ function paintIcon(id, name){
   ["methodMpesaIcon","phone"],
   ["methodAirtelIcon","phone"],
   ["methodCryptoIcon","coin"],
+  ["supportIcon","phone"],
 ].forEach(([id, name]) => paintIcon(id, name));
+
+
+/* ==================================================
+   THEME TOGGLE
+================================================== */
+
+function currentTheme(){
+  return document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+}
+
+function paintThemeIcon(){
+  paintIcon("themeToggleIcon", currentTheme() === "light" ? "moon" : "sun");
+}
+
+function toggleTheme(){
+  const next = currentTheme() === "light" ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", next);
+  try{ localStorage.setItem("springsTheme", next); }catch(e){}
+  paintThemeIcon();
+}
+
+paintThemeIcon();
 
 
 /* ==================================================
@@ -913,7 +1214,9 @@ async function apiFetch(path, options = {}, token = authToken){
   try{ data = await res.json(); }catch(e){ /* empty body, e.g. 204 */ }
 
   if(!res.ok){
-    throw new Error(data.error || `Request failed (${res.status})`);
+    const err = new Error(data.error || `Request failed (${res.status})`);
+    err.status = res.status;
+    throw err;
   }
   return data;
 }
@@ -1000,23 +1303,31 @@ function renderInvestments(){
   const box = document.getElementById("activeInvestments");
 
   if(currentInvestments.length === 0){
-    box.innerHTML = `<p class="empty-note">No active investments yet.</p>`;
+    box.innerHTML = `<div class="investments-empty"><p class="empty-note">No active investments yet — pick a product below to get started.</p></div>`;
     return;
   }
 
-  box.innerHTML = currentInvestments.map(inv => `
-    <div class="row">
-      <div class="row-icon neutral">${ICONS.chart}</div>
-      <div class="row-body">
-        <div class="row-title">${inv.productName} <span class="${pillClass(inv.status)}">${inv.status}</span></div>
-        <div class="row-meta">Invested Ksh ${Number(inv.amount).toLocaleString()} · Matures ${new Date(inv.maturityDate).toLocaleString()}</div>
+  box.innerHTML = `<div class="investments-grid">${currentInvestments.map(inv => `
+    <div class="investment-card">
+      <div class="investment-card-head">
+        <span class="investment-card-name">${inv.productName}</span>
+        <span class="${pillClass(inv.status)}">${inv.status}</span>
       </div>
-      <div>
-        <div class="row-amount credit">+ Ksh ${Number(inv.profit).toLocaleString()}</div>
-        <div class="row-sub">Payout Ksh ${Number(inv.expectedPayout).toLocaleString()}</div>
+      <div class="investment-card-amount">Ksh ${Number(inv.amount).toLocaleString()}</div>
+      <div class="row-meta">${inv.durationHours}h maturity period</div>
+      <div class="row-meta">Matures ${new Date(inv.maturityDate).toLocaleString()}</div>
+      <div class="investment-card-footer">
+        <div>
+          <div class="row-sub">Expected profit</div>
+          <div class="row-amount credit">+ Ksh ${Number(inv.profit).toLocaleString()}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="row-sub">Payout</div>
+          <div class="row-amount">Ksh ${Number(inv.expectedPayout).toLocaleString()}</div>
+        </div>
       </div>
     </div>
-  `).join("");
+  `).join("")}</div>`;
 
 }
 
@@ -1060,7 +1371,58 @@ async function loadDashboardData(){
 }
 
 
+function setHeaderMode(mode){
+  const nav = document.getElementById("appNav");
+  const account = document.getElementById("appAccount");
+  const adminAccount = document.getElementById("appAdminAccount");
+  if(nav) nav.classList.toggle("hidden", mode !== "guest");
+  if(account) account.classList.toggle("hidden", mode !== "user");
+  if(adminAccount) adminAccount.classList.toggle("hidden", mode !== "admin");
+}
+
+
+function showLanding(){
+
+setHeaderMode("guest");
+
+document.getElementById(
+"landingPage"
+).classList.remove("hidden");
+
+document.getElementById(
+"loginPage"
+).classList.add("hidden");
+
+document.getElementById(
+"signupPage"
+).classList.add("hidden");
+
+document.getElementById(
+"dashboardPage"
+).classList.add("hidden");
+
+document.getElementById(
+"walletPage"
+).classList.add("hidden");
+
+document.getElementById(
+"adminLoginPage"
+).classList.add("hidden");
+
+document.getElementById(
+"adminPage"
+).classList.add("hidden");
+
+}
+
+
 function showLogin(){
+
+setHeaderMode("guest");
+
+document.getElementById(
+"landingPage"
+).classList.add("hidden");
 
 document.getElementById(
 "loginPage"
@@ -1091,6 +1453,12 @@ document.getElementById(
 
 function showSignup(){
 
+setHeaderMode("guest");
+
+document.getElementById(
+"landingPage"
+).classList.add("hidden");
+
 document.getElementById(
 "loginPage"
 ).classList.add("hidden");
@@ -1099,10 +1467,32 @@ document.getElementById(
 "signupPage"
 ).classList.remove("hidden");
 
+document.getElementById(
+"dashboardPage"
+).classList.add("hidden");
+
+document.getElementById(
+"walletPage"
+).classList.add("hidden");
+
+document.getElementById(
+"adminLoginPage"
+).classList.add("hidden");
+
+document.getElementById(
+"adminPage"
+).classList.add("hidden");
+
 }
 
 
 function showDashboard(){
+
+setHeaderMode("user");
+
+document.getElementById(
+"landingPage"
+).classList.add("hidden");
 
 document.getElementById(
 "loginPage"
@@ -1670,6 +2060,8 @@ async function copyTillNumber(){
 ================================================== */
 
 function showAdminLogin(){
+  setHeaderMode("guest");
+  document.getElementById("landingPage").classList.add("hidden");
   document.getElementById("loginPage").classList.add("hidden");
   document.getElementById("signupPage").classList.add("hidden");
   document.getElementById("dashboardPage").classList.add("hidden");
@@ -1699,6 +2091,7 @@ async function adminLogin(){
     adminToken = data.token;
     localStorage.setItem("springsAdminToken", adminToken);
 
+    setHeaderMode("admin");
     document.getElementById("adminLoginPage").classList.add("hidden");
     document.getElementById("adminPage").classList.remove("hidden");
 
@@ -2311,14 +2704,21 @@ if(authToken){
 
   }catch(e){
 
-    authToken = null;
-    localStorage.removeItem("springsToken");
+    // Only an actual expired/invalid session should force a fresh login.
+    // A network blip, a 429, or a 500 shouldn't throw away a perfectly good
+    // token — leave it in place so the next reload can just retry.
+    if(e.status === 401){
+      authToken = null;
+      localStorage.removeItem("springsToken");
+    }else{
+      console.error("Could not verify session, will retry on next load:", e);
+    }
 
   }
 
 }
 
-showLogin();
+showLanding();
 
 }
 
