@@ -1131,6 +1131,16 @@ Deposit funds
 
 
 <script>
+// Split-hosting config: when this page is served from Netlify (a static
+// host, separate from the API), point requests at the Railway backend.
+// Same-origin setups (local dev, or the Express app serving this file
+// itself) are untouched — they keep using relative paths automatically.
+if (location.hostname.endsWith(".netlify.app")) {
+  window.API_URL = "https://REPLACE-WITH-YOUR-RAILWAY-URL.up.railway.app";
+}
+</script>
+
+<script>
 
 
 /* ==================================================
