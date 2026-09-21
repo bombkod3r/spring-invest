@@ -2133,8 +2133,8 @@ function renderAdminStats(stats){
     <div class="stat-card"><div class="stat-label">Pending deposits</div><div class="stat-value">${stats.pendingDeposits}</div></div>
     <div class="stat-card"><div class="stat-label">Pending withdrawals</div><div class="stat-value">${stats.pendingWithdrawals}</div></div>
     <div class="stat-card"><div class="stat-label">Total wallet balance</div><div class="stat-value">Ksh ${formatKsh(stats.totalBalance)}</div></div>
-    <div class="stat-card"><div class="stat-label">Active investors</div><div class="stat-value">${stats.activeInvestors}</div></div>
-    <div class="stat-card"><div class="stat-label">Total invested</div><div class="stat-value">Ksh ${formatKsh(stats.totalInvested)}</div></div>
+    <div class="stat-card"><div class="stat-label">Active investors</div><div class="stat-value">${stats.activeInvestors ?? "—"}</div></div>
+    <div class="stat-card"><div class="stat-label">Total invested</div><div class="stat-value">${stats.totalInvested === undefined ? "—" : "Ksh " + formatKsh(stats.totalInvested)}</div></div>
   `;
 }
 
@@ -2216,29 +2216,24 @@ function renderAdminActivity(activity){
 
 async function refreshAdmin(){
 
-  try{
+  // Each section loads on its own so one failing request (e.g. a backend that
+  // hasn't been redeployed yet) can't blank out the rest of the dashboard.
+  const sections = [
+    ["/api/admin/stats", "adminStats", r => renderAdminStats(r.stats)],
+    ["/api/admin/users", "adminUsers", r => renderAdminUsers(r.users)],
+    ["/api/admin/investments", "adminInvestments", r => renderAdminInvestments(r.investments)],
+    ["/api/admin/deposits", "adminDeposits", r => renderAdminDeposits(r.deposits)],
+    ["/api/admin/withdrawals", "adminWithdrawals", r => renderAdminWithdrawals(r.withdrawals)],
+    ["/api/admin/activity", "adminActivity", r => renderAdminActivity(r.activity)],
+  ];
 
-    const [statsRes, usersRes, investmentsRes, depositsRes, withdrawalsRes, activityRes] = await Promise.all([
-      apiFetch("/api/admin/stats", {}, adminToken),
-      apiFetch("/api/admin/users", {}, adminToken),
-      apiFetch("/api/admin/investments", {}, adminToken),
-      apiFetch("/api/admin/deposits", {}, adminToken),
-      apiFetch("/api/admin/withdrawals", {}, adminToken),
-      apiFetch("/api/admin/activity", {}, adminToken),
-    ]);
-
-    renderAdminStats(statsRes.stats);
-    renderAdminUsers(usersRes.users);
-    renderAdminInvestments(investmentsRes.investments);
-    renderAdminDeposits(depositsRes.deposits);
-    renderAdminWithdrawals(withdrawalsRes.withdrawals);
-    renderAdminActivity(activityRes.activity);
-
-  }catch(err){
-
-    document.getElementById("adminStats").innerHTML = `<div class="error">${err.message}</div>`;
-
-  }
+  await Promise.all(sections.map(async ([path, elementId, render]) => {
+    try{
+      render(await apiFetch(path, {}, adminToken));
+    }catch(err){
+      document.getElementById(elementId).innerHTML = `<div class="error">${esc(err.message)}</div>`;
+    }
+  }));
 
 }
 
