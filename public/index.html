@@ -1050,6 +1050,11 @@ Deposit funds
 </div>
 
 <div class="container wide" style="max-width:720px;">
+<p class="eyebrow" style="margin-bottom:4px;">Active investors</p>
+<div id="adminInvestments"></div>
+</div>
+
+<div class="container wide" style="max-width:720px;">
 <p class="eyebrow" style="margin-bottom:4px;">Deposits</p>
 <div id="adminDeposits"></div>
 </div>
@@ -2128,14 +2133,37 @@ function renderAdminStats(stats){
     <div class="stat-card"><div class="stat-label">Pending deposits</div><div class="stat-value">${stats.pendingDeposits}</div></div>
     <div class="stat-card"><div class="stat-label">Pending withdrawals</div><div class="stat-value">${stats.pendingWithdrawals}</div></div>
     <div class="stat-card"><div class="stat-label">Total wallet balance</div><div class="stat-value">Ksh ${formatKsh(stats.totalBalance)}</div></div>
+    <div class="stat-card"><div class="stat-label">Active investors</div><div class="stat-value">${stats.activeInvestors}</div></div>
+    <div class="stat-card"><div class="stat-label">Total invested</div><div class="stat-value">Ksh ${formatKsh(stats.totalInvested)}</div></div>
   `;
+}
+
+function esc(value){
+  return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function renderAdminInvestments(investments){
+  document.getElementById("adminInvestments").innerHTML = investments.length ? investments.map(i=>`
+    <div class="row">
+      <div class="row-icon neutral">${ICONS.chart}</div>
+      <div class="row-body">
+        <div class="row-title">${esc(i.firstName)} ${esc(i.lastName)} <span class="row-method">@${esc(i.username)}</span></div>
+        <div class="row-meta"><span class="pill pill-active">${esc(i.productName)}</span> ${i.durationHours}h plan · Started ${new Date(i.startDate).toLocaleString()}</div>
+        <div class="row-meta">Matures ${new Date(i.maturityDate).toLocaleString()}</div>
+      </div>
+      <div>
+        <div class="row-amount">Ksh ${formatKsh(i.amount)}</div>
+        <div class="row-sub">Profit + Ksh ${formatKsh(i.profit)}</div>
+        <div class="row-sub">Payout Ksh ${formatKsh(i.expectedPayout)}</div>
+      </div>
+    </div>`).join("") : `<p class="empty-note">No active investments right now.</p>`;
 }
 
 function renderAdminUsers(users){
   document.getElementById("adminUsers").innerHTML = users.length ? users.map(u=>`
     <div class="row">
       <div class="row-body">
-        <div class="row-title">${u.firstName} ${u.lastName} <span class="row-method">@${u.username}</span></div>
+        <div class="row-title">${esc(u.firstName)} ${esc(u.lastName)} <span class="row-method">@${esc(u.username)}</span></div>
         <div class="row-meta">${u.role} · ${u.isActive ? "Active" : "Disabled"} · Joined ${new Date(u.createdAt).toLocaleString()}</div>
       </div>
     </div>`).join("") : `<p class="empty-note">No users yet.</p>`;
@@ -2145,8 +2173,8 @@ function renderAdminDeposits(deposits){
   document.getElementById("adminDeposits").innerHTML = deposits.length ? deposits.map(d=>`
     <div class="row">
       <div class="row-body">
-        <div class="row-title">${d.username} <span class="row-method">${d.method}</span></div>
-        <div class="row-meta">Ref ${d.reference} · <span class="${pillClass(d.status)}">${d.status}</span> · ${new Date(d.createdAt).toLocaleString()}</div>
+        <div class="row-title">${esc(d.username)} <span class="row-method">${esc(d.method)}</span></div>
+        <div class="row-meta">Ref ${esc(d.reference)} · <span class="${pillClass(d.status)}">${d.status}</span> · ${new Date(d.createdAt).toLocaleString()}</div>
         ${d.status === "pending" ? `
         <div class="row-actions">
           <button class="btn btn-green" onclick="adminDecision('deposit',${d.id},'approve')">Approve</button>
@@ -2161,8 +2189,8 @@ function renderAdminWithdrawals(withdrawals){
   document.getElementById("adminWithdrawals").innerHTML = withdrawals.length ? withdrawals.map(w=>`
     <div class="row">
       <div class="row-body">
-        <div class="row-title">${w.username} <span class="row-method">${w.method}</span></div>
-        <div class="row-meta">To ${w.destination} · <span class="${pillClass(w.status)}">${w.status}</span> · ${new Date(w.createdAt).toLocaleString()}</div>
+        <div class="row-title">${esc(w.username)} <span class="row-method">${esc(w.method)}</span></div>
+        <div class="row-meta">To ${esc(w.destination)} · <span class="${pillClass(w.status)}">${w.status}</span> · ${new Date(w.createdAt).toLocaleString()}</div>
         ${w.status === "pending" ? `
         <div class="row-actions">
           <button class="btn btn-green" onclick="adminDecision('withdrawal',${w.id},'approve')">Approve</button>
@@ -2180,8 +2208,8 @@ function renderAdminActivity(activity){
   document.getElementById("adminActivity").innerHTML = activity.length ? activity.map(a=>`
     <div class="row">
       <div class="row-body">
-        <div class="row-title">${a.action.replace(/_/g," ")} <span class="row-method">${a.adminUsername || "system"}</span></div>
-        <div class="row-meta">${a.description || ""} ${a.description ? "·" : ""} ${new Date(a.createdAt).toLocaleString()}</div>
+        <div class="row-title">${esc(a.action.replace(/_/g," "))} <span class="row-method">${esc(a.adminUsername || "system")}</span></div>
+        <div class="row-meta">${esc(a.description || "")} ${a.description ? "·" : ""} ${new Date(a.createdAt).toLocaleString()}</div>
       </div>
     </div>`).join("") : `<p class="empty-note">No activity yet.</p>`;
 }
@@ -2190,9 +2218,10 @@ async function refreshAdmin(){
 
   try{
 
-    const [statsRes, usersRes, depositsRes, withdrawalsRes, activityRes] = await Promise.all([
+    const [statsRes, usersRes, investmentsRes, depositsRes, withdrawalsRes, activityRes] = await Promise.all([
       apiFetch("/api/admin/stats", {}, adminToken),
       apiFetch("/api/admin/users", {}, adminToken),
+      apiFetch("/api/admin/investments", {}, adminToken),
       apiFetch("/api/admin/deposits", {}, adminToken),
       apiFetch("/api/admin/withdrawals", {}, adminToken),
       apiFetch("/api/admin/activity", {}, adminToken),
@@ -2200,6 +2229,7 @@ async function refreshAdmin(){
 
     renderAdminStats(statsRes.stats);
     renderAdminUsers(usersRes.users);
+    renderAdminInvestments(investmentsRes.investments);
     renderAdminDeposits(depositsRes.deposits);
     renderAdminWithdrawals(withdrawalsRes.withdrawals);
     renderAdminActivity(activityRes.activity);

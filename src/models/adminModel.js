@@ -26,8 +26,25 @@ const stats = async () => {
       (SELECT COUNT(*) FROM users WHERE role = 'user') AS users,
       (SELECT COUNT(*) FROM deposits WHERE status = 'pending') AS "pendingDeposits",
       (SELECT COUNT(*) FROM withdrawals WHERE status = 'pending') AS "pendingWithdrawals",
-      (SELECT COALESCE(SUM(balance), 0) FROM wallets) AS "totalBalance"`);
+      (SELECT COALESCE(SUM(balance), 0) FROM wallets) AS "totalBalance",
+      (SELECT COUNT(DISTINCT user_id) FROM investments WHERE status = 'active') AS "activeInvestors",
+      (SELECT COALESCE(SUM(amount), 0) FROM investments WHERE status = 'active') AS "totalInvested"`);
   return result.rows[0];
 };
 
-module.exports = { log, listActivity, stats };
+const listActiveInvestments = async () => {
+  const result = await query(
+    `SELECT i.id, i.user_id AS "userId", u.username, u.first_name AS "firstName", u.last_name AS "lastName",
+            p.name AS "productName", p.duration_hours AS "durationHours",
+            i.amount, i.profit, i.expected_payout AS "expectedPayout",
+            i.start_date AS "startDate", i.maturity_date AS "maturityDate"
+     FROM investments i
+     JOIN users u ON u.id = i.user_id
+     JOIN investment_products p ON p.id = i.product_id
+     WHERE i.status = 'active'
+     ORDER BY i.maturity_date ASC, i.id ASC`,
+  );
+  return result.rows;
+};
+
+module.exports = { log, listActivity, stats, listActiveInvestments };

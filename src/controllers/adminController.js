@@ -182,10 +182,20 @@ const getActivity = async (req, res, next) => {
   }
 };
 
+const listInvestments = async (req, res, next) => {
+  try {
+    const investments = await adminModel.listActiveInvestments();
+    return res.json({ investments });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 module.exports = {
   adminLogin,
   getStats,
   listUsers,
+  listInvestments,
   listDeposits,
   listWithdrawals,
   approveDeposit: reviewDeposit('approved'),

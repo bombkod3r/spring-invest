@@ -12,6 +12,7 @@ router.use(requireAuth, requireAdmin);
 
 router.get('/stats', adminController.getStats);
 router.get('/users', adminController.listUsers);
+router.get('/investments', adminController.listInvestments);
 router.get('/deposits', adminController.listDeposits);
 router.get('/withdrawals', adminController.listWithdrawals);
 router.get('/activity', adminController.getActivity);
